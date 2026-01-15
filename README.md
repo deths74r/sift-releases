@@ -2,6 +2,7 @@
 
 **Persistent memory for Claude Code.**
 
+> [!WARNING]
 > **Alpha Release** — Sift is under active development. APIs and features may change. Feedback welcome.
 
 Sift gives Claude Code persistent memory, fast search, and intelligent file editing.
