@@ -29,6 +29,20 @@ chmod +x sift-darwin-x86_64
 sudo mv sift-darwin-x86_64 /usr/local/bin/sift
 ```
 
+## Claude Code Integration
+
+Add sift as an MCP server to Claude Code:
+
+```bash
+claude mcp add sift -- sift --mcp
+```
+
+This enables Claude Code to use sift's powerful tools:
+- `sift_search` - FTS5 full-text search (30-195x faster than grep)
+- `sift_read` - Read files with line numbers
+- `sift_edit` - Find/replace with fuzzy whitespace matching
+- `sift_memory_*` - Persistent agent memory across sessions
+
 ## Features
 
 - **FTS5 Full-Text Search**: Boolean queries (AND, OR, NOT, NEAR), 30-195x faster than grep
