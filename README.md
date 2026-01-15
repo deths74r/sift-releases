@@ -45,27 +45,26 @@ The machine-readable nature of these tools creates accountability.
 
 ### Quick Install (Recommended)
 
-One command to download, install, and configure everything:
+Interactive installers that prompt for each step:
+
+**Using Bash (requires jq for hooks):**
+```bash
+bash <(curl -fsSL https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-setup.sh)
+```
 
 **Using Python (no dependencies):**
 ```bash
-curl -fsSL https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-setup.py | python3
+curl -fsSL https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-setup.py -o /tmp/sift-setup.py && python3 /tmp/sift-setup.py
 ```
 
-**Using Bash (requires jq):**
-```bash
-curl -fsSL https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-setup.sh | bash
-```
+The installer will prompt before each step:
+1. Install binary to `~/.local/bin`
+2. Register sift as MCP server with Claude Code
+3. Configure optional hooks (auto-format C/C++, block sensitive files)
 
-This will:
-1. Download the correct binary for your platform
-2. Install to `/usr/local/bin` (or `~/.local/bin`)
-3. Add sift to Claude Code as an MCP server
-4. Configure optional hooks for auto-formatting and file protection
+Existing hooks are preserved—the installer skips hook configuration if hooks already exist.
 
 ### Manual Install
-
-If you prefer to install manually:
 
 **Step 1: Download**
 
@@ -78,7 +77,8 @@ If you prefer to install manually:
 **Step 2: Install**
 ```bash
 chmod +x sift-*
-sudo mv sift-* /usr/local/bin/sift
+mkdir -p ~/.local/bin
+mv sift-* ~/.local/bin/sift
 ```
 
 **Step 3: Add to Claude Code**
@@ -88,10 +88,10 @@ claude mcp add --scope user sift -- sift --mcp
 
 **Step 4: Verify**
 ```bash
-sift --version
+~/.local/bin/sift --version
 ```
 
-> **Note:** Sift creates a separate `.sift/` database in each project directory, so memories and indexes are always project-specific.
+> **Note:** Add `~/.local/bin` to your PATH if not already. Sift creates a `.sift/` database in each project directory, so memories and indexes are project-specific.
 
 ### Try It Out
 
