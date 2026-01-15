@@ -41,76 +41,73 @@ SQL doesn't make Claude incapable of mistakes, but it provides a way to verify. 
 
 The machine-readable nature of these tools creates accountability.
 
-## Quick Start
+## Installation
 
-### 1. Download
+### Quick Install (Recommended)
 
-**Linux (x86_64)**
+One command to download, install, and configure everything:
+
+**Using Python (no dependencies):**
 ```bash
-curl -LO https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-linux-x86_64
-chmod +x sift-linux-x86_64
-sudo mv sift-linux-x86_64 /usr/local/bin/sift
+curl -fsSL https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-setup.py | python3
 ```
 
-**macOS (Apple Silicon)**
+**Using Bash (requires jq):**
 ```bash
-curl -LO https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-darwin-arm64
-chmod +x sift-darwin-arm64
-sudo mv sift-darwin-arm64 /usr/local/bin/sift
+curl -fsSL https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-setup.sh | bash
 ```
 
-**macOS (Intel)**
+This will:
+1. Download the correct binary for your platform
+2. Install to `/usr/local/bin` (or `~/.local/bin`)
+3. Add sift to Claude Code as an MCP server
+4. Configure optional hooks for auto-formatting and file protection
+
+### Manual Install
+
+If you prefer to install manually:
+
+**Step 1: Download**
+
+| Platform | Command |
+|----------|--------|
+| Linux x86_64 | `curl -LO https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-linux-x86_64` |
+| macOS Apple Silicon | `curl -LO https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-darwin-arm64` |
+| macOS Intel | `curl -LO https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-darwin-x86_64` |
+
+**Step 2: Install**
 ```bash
-curl -LO https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-darwin-x86_64
-chmod +x sift-darwin-x86_64
-sudo mv sift-darwin-x86_64 /usr/local/bin/sift
+chmod +x sift-*
+sudo mv sift-* /usr/local/bin/sift
 ```
 
-### 2. Add to Claude Code
-
-Add sift globally (recommended):
+**Step 3: Add to Claude Code**
 ```bash
 claude mcp add --scope user sift -- sift --mcp
 ```
 
-Or add to a specific project only:
+**Step 4: Verify**
 ```bash
-cd your-project
-claude mcp add --scope project sift -- sift --mcp
+sift --version
 ```
 
-**Note:** Sift automatically creates a separate `.sift/` database in each project directory, so your memories and search indexes are always project-specific even when sift is installed globally.
+> **Note:** Sift creates a separate `.sift/` database in each project directory, so memories and indexes are always project-specific.
 
-### 3. Try It Out
+### Try It Out
 
-Create a new directory and start Claude Code:
-
+Start Claude Code in any directory:
 ```bash
-mkdir test-sift && cd test-sift
 claude
 ```
 
-**Test the memory system:**
+**Test memory:**
 ```
 Remember that I prefer early returns over nested if statements
 ```
 
-```
-Remember that our API rate limits to 100 requests per minute
-```
-
 Start a new session and ask:
 ```
-What do you know about my preferences and our API?
-```
-
-**Test search and editing:**
-```
-Create a few Python files with different functions, then search for all function definitions
-```
-
-```
-Create a config.json file with some settings, then update the timeout value to 30
+What do you know about my preferences?
 ```
 
 ## Tools
