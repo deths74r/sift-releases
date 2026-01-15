@@ -35,13 +35,34 @@ sudo mv sift-darwin-x86_64 /usr/local/bin/sift
 claude mcp add sift -- sift --mcp
 ```
 
-### 3. Test It
+### 3. Try It Out
 
-Start Claude Code and ask:
+Create a new directory and start Claude Code:
 
-> "Search for TODO comments in this codebase"
+```bash
+mkdir test-sift && cd test-sift
+claude
+```
 
-Claude will use `sift_search` to find matches 30-195x faster than grep.
+**Test search and indexing:**
+```
+Create a few Python files with different functions, then search for all files containing "def"
+```
+
+**Test file editing:**
+```
+Create a config.json file, then update one of the values
+```
+
+**Test agent memory:**
+```
+Remember that I prefer tabs over spaces
+```
+
+Then in a new session:
+```
+What are my coding preferences?
+```
 
 ## Tools
 
