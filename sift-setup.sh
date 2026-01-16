@@ -113,9 +113,31 @@ if [[ "$DO_INSTALL" == "1" ]]; then
     echo "  ✓ Installed binary"
     "$DEST" --version 2>/dev/null | grep -E "Version|version" | sed 's/^/    /' || true
     
-    # Install templates
-    TEMPLATE_DIR="$HOME/.local/share/sift/templates"
-    mkdir -p "$TEMPLATE_DIR"
+    if ! command -v sift &> /dev/null; then
+        echo "  Note: Add $INSTALL_DIR to your PATH"
+    fi
+fi
+echo
+
+# Step 1b: Install templates (always, regardless of binary install)
+echo "Step 1b: Install documentation templates"
+echo "----------------------------------------"
+TEMPLATE_DIR="$HOME/.local/share/sift/templates"
+mkdir -p "$TEMPLATE_DIR"
+
+if [[ -f "$TEMPLATE_DIR/CLAUDE.md" ]]; then
+    echo "  Templates already installed."
+    if prompt "  Reinstall?" "n"; then
+        DO_TEMPLATES=1
+    else
+        echo "  Skipped."
+        DO_TEMPLATES=0
+    fi
+else
+    DO_TEMPLATES=1
+fi
+
+if [[ "$DO_TEMPLATES" == "1" ]]; then
     echo "  Downloading templates..."
     curl -fsSL "$RELEASE_URL/CLAUDE.md" -o "$TEMPLATE_DIR/CLAUDE.md" 2>/dev/null || true
     curl -fsSL "$RELEASE_URL/MEMORY.md" -o "$TEMPLATE_DIR/MEMORY.md" 2>/dev/null || true
@@ -125,21 +147,17 @@ if [[ "$DO_INSTALL" == "1" ]]; then
     curl -fsSL "$RELEASE_URL/REPO_TOOLS.md" -o "$TEMPLATE_DIR/REPO_TOOLS.md" 2>/dev/null || true
     curl -fsSL "$RELEASE_URL/SQL_TOOLS.md" -o "$TEMPLATE_DIR/SQL_TOOLS.md" 2>/dev/null || true
     echo "  ✓ Installed templates"
-    
-    if ! command -v sift &> /dev/null; then
-        echo "  Note: Add $INSTALL_DIR to your PATH"
-    fi
-    
-    # Migrate old sift.db to memory.db if needed
-    if [[ -f ".sift/sift.db" ]] && [[ ! -f ".sift/memory.db" ]]; then
-        mv .sift/sift.db .sift/memory.db
-        echo "  ✓ Migrated .sift/sift.db -> .sift/memory.db"
-    fi
-    
-    # Seed memory database with tool documentation
-    if command -v sift &> /dev/null || [[ -f "$DEST" ]]; then
-        "$DEST" --seed-tools 2>/dev/null || true
-    fi
+fi
+
+# Migrate old sift.db to memory.db if needed
+if [[ -f ".sift/sift.db" ]] && [[ ! -f ".sift/memory.db" ]]; then
+    mv .sift/sift.db .sift/memory.db
+    echo "  ✓ Migrated .sift/sift.db -> .sift/memory.db"
+fi
+
+# Seed memory database with tool documentation
+if command -v sift &> /dev/null; then
+    sift --seed-tools 2>/dev/null || true
 fi
 echo
 

@@ -177,10 +177,23 @@ def main():
         
         if not shutil.which("sift"):
             print(f"  Note: Add {install_dir} to your PATH")
-        
-        # Install templates
-        template_dir = Path.home() / ".local" / "share" / "sift" / "templates"
-        template_dir.mkdir(parents=True, exist_ok=True)
+    print()
+
+    # Install templates (always, regardless of binary install)
+    print("Step 1b: Install documentation templates")
+    print("----------------------------------------")
+    template_dir = Path.home() / ".local" / "share" / "sift" / "templates"
+    template_dir.mkdir(parents=True, exist_ok=True)
+
+    # Check if templates already exist
+    templates_exist = (template_dir / "CLAUDE.md").exists()
+    if templates_exist:
+        if prompt("  Templates already installed. Reinstall?", default="n"):
+            templates_exist = False
+        else:
+            print("  Skipped.")
+
+    if not templates_exist:
         print("  Downloading templates...")
         try:
             download_file(f"{RELEASE_URL}/CLAUDE.md", template_dir / "CLAUDE.md")
@@ -192,18 +205,19 @@ def main():
             download_file(f"{RELEASE_URL}/SQL_TOOLS.md", template_dir / "SQL_TOOLS.md")
             print("  ✓ Installed templates")
         except Exception:
-            print("  ⚠ Could not download templates (will use embedded fallback)")
-        
-        # Migrate old sift.db to memory.db if needed
-        old_db = Path(".sift/sift.db")
-        new_db = Path(".sift/memory.db")
-        if old_db.exists() and not new_db.exists():
-            old_db.rename(new_db)
-            print("  ✓ Migrated .sift/sift.db -> .sift/memory.db")
-        
-        # Seed memory database with tool documentation
+            print("  ⚠ Could not download templates")
+
+    # Migrate old sift.db to memory.db if needed
+    old_db = Path(".sift/sift.db")
+    new_db = Path(".sift/memory.db")
+    if old_db.exists() and not new_db.exists():
+        old_db.rename(new_db)
+        print("  ✓ Migrated .sift/sift.db -> .sift/memory.db")
+
+    # Seed memory database with tool documentation
+    if shutil.which("sift"):
         try:
-            subprocess.run([str(dest), "--seed-tools"], capture_output=True, check=False)
+            subprocess.run(["sift", "--seed-tools"], capture_output=True, check=False)
         except Exception:
             pass
     print()
