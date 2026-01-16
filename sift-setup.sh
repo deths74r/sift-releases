@@ -149,13 +149,8 @@ if [[ "$DO_TEMPLATES" == "1" ]]; then
     echo "  ✓ Installed templates"
 fi
 
-# Migrate old sift.db to memory.db if needed
-if [[ -f ".sift/sift.db" ]] && [[ ! -f ".sift/memory.db" ]]; then
-    mv .sift/sift.db .sift/memory.db
-    echo "  ✓ Migrated .sift/sift.db -> .sift/memory.db"
-fi
-
 # Seed memory database with tool documentation
+# (sift binary auto-migrates sift.db -> memory.db on first access)
 if command -v sift &> /dev/null; then
     sift --seed-tools 2>/dev/null || true
 fi

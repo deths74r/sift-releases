@@ -207,14 +207,8 @@ def main():
         except Exception:
             print("  ⚠ Could not download templates")
 
-    # Migrate old sift.db to memory.db if needed
-    old_db = Path(".sift/sift.db")
-    new_db = Path(".sift/memory.db")
-    if old_db.exists() and not new_db.exists():
-        old_db.rename(new_db)
-        print("  ✓ Migrated .sift/sift.db -> .sift/memory.db")
-
     # Seed memory database with tool documentation
+    # (sift binary auto-migrates sift.db -> memory.db on first access)
     if shutil.which("sift"):
         try:
             subprocess.run(["sift", "--seed-tools"], capture_output=True, check=False)
