@@ -196,13 +196,13 @@ def main():
     if not templates_exist:
         print(f"  Downloading templates to {claude_dir}/...")
         try:
-            download_file(f"{RELEASE_URL}/CLAUDE.md", claude_dir / "CLAUDE.md")
-            download_file(f"{RELEASE_URL}/MEMORY.md", claude_dir / "MEMORY.md")
-            download_file(f"{RELEASE_URL}/FILE_TOOLS.md", claude_dir / "FILE_TOOLS.md")
-            download_file(f"{RELEASE_URL}/SEARCH_TOOLS.md", claude_dir / "SEARCH_TOOLS.md")
-            download_file(f"{RELEASE_URL}/WEB_TOOLS.md", claude_dir / "WEB_TOOLS.md")
-            download_file(f"{RELEASE_URL}/REPO_TOOLS.md", claude_dir / "REPO_TOOLS.md")
-            download_file(f"{RELEASE_URL}/SQL_TOOLS.md", claude_dir / "SQL_TOOLS.md")
+            download_file(f"{RELEASE_URL}/assets/CLAUDE.md", claude_dir / "CLAUDE.md")
+            download_file(f"{RELEASE_URL}/assets/MEMORY.md", claude_dir / "MEMORY.md")
+            download_file(f"{RELEASE_URL}/assets/FILE_TOOLS.md", claude_dir / "FILE_TOOLS.md")
+            download_file(f"{RELEASE_URL}/assets/SEARCH_TOOLS.md", claude_dir / "SEARCH_TOOLS.md")
+            download_file(f"{RELEASE_URL}/assets/WEB_TOOLS.md", claude_dir / "WEB_TOOLS.md")
+            download_file(f"{RELEASE_URL}/assets/REPO_TOOLS.md", claude_dir / "REPO_TOOLS.md")
+            download_file(f"{RELEASE_URL}/assets/SQL_TOOLS.md", claude_dir / "SQL_TOOLS.md")
             print("  ✓ Installed templates")
         except Exception:
             print("  ⚠ Could not download templates")

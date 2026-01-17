@@ -139,13 +139,13 @@ fi
 
 if [[ "$DO_TEMPLATES" == "1" ]]; then
     echo "  Downloading templates to $CLAUDE_DIR/..."
-    curl -fsSL "$RELEASE_URL/CLAUDE.md" -o "$CLAUDE_DIR/CLAUDE.md" 2>/dev/null || true
-    curl -fsSL "$RELEASE_URL/MEMORY.md" -o "$CLAUDE_DIR/MEMORY.md" 2>/dev/null || true
-    curl -fsSL "$RELEASE_URL/FILE_TOOLS.md" -o "$CLAUDE_DIR/FILE_TOOLS.md" 2>/dev/null || true
-    curl -fsSL "$RELEASE_URL/SEARCH_TOOLS.md" -o "$CLAUDE_DIR/SEARCH_TOOLS.md" 2>/dev/null || true
-    curl -fsSL "$RELEASE_URL/WEB_TOOLS.md" -o "$CLAUDE_DIR/WEB_TOOLS.md" 2>/dev/null || true
-    curl -fsSL "$RELEASE_URL/REPO_TOOLS.md" -o "$CLAUDE_DIR/REPO_TOOLS.md" 2>/dev/null || true
-    curl -fsSL "$RELEASE_URL/SQL_TOOLS.md" -o "$CLAUDE_DIR/SQL_TOOLS.md" 2>/dev/null || true
+    curl -fsSL "$RELEASE_URL/assets/CLAUDE.md" -o "$CLAUDE_DIR/CLAUDE.md" 2>/dev/null || true
+    curl -fsSL "$RELEASE_URL/assets/MEMORY.md" -o "$CLAUDE_DIR/MEMORY.md" 2>/dev/null || true
+    curl -fsSL "$RELEASE_URL/assets/FILE_TOOLS.md" -o "$CLAUDE_DIR/FILE_TOOLS.md" 2>/dev/null || true
+    curl -fsSL "$RELEASE_URL/assets/SEARCH_TOOLS.md" -o "$CLAUDE_DIR/SEARCH_TOOLS.md" 2>/dev/null || true
+    curl -fsSL "$RELEASE_URL/assets/WEB_TOOLS.md" -o "$CLAUDE_DIR/WEB_TOOLS.md" 2>/dev/null || true
+    curl -fsSL "$RELEASE_URL/assets/REPO_TOOLS.md" -o "$CLAUDE_DIR/REPO_TOOLS.md" 2>/dev/null || true
+    curl -fsSL "$RELEASE_URL/assets/SQL_TOOLS.md" -o "$CLAUDE_DIR/SQL_TOOLS.md" 2>/dev/null || true
     echo "  ✓ Installed templates"
 fi
 
