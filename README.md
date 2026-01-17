@@ -53,24 +53,24 @@ The history document demonstrates both thinking modes working together: linear c
 
 ### Quick Install (Recommended)
 
-Interactive installers that prompt for each step:
+Interactive installer that prompts for each step (requires jq for hooks):
 
-**Using Python (no dependencies):**
 ```bash
-curl -fsSL https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-setup.py -o /tmp/sift-setup.py && python3 /tmp/sift-setup.py
-```
-
-**Using Bash (requires jq for hooks):**
-```bash
-curl -fsSL https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-setup.sh -o /tmp/sift-setup.sh && bash /tmp/sift-setup.sh
+bash <(curl -fsSL https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-setup.sh)
 ```
 
 The installer will prompt before each step:
 1. Install binary to `~/.local/bin`
-2. Register sift as MCP server with Claude Code
-3. Configure optional hooks (auto-format C/C++, block sensitive files)
+2. Install documentation templates to `~/.claude/`
+3. Register sift as MCP server with Claude Code
+4. Configure session hooks (context preservation, workspace indexing)
 
-Existing hooks are preserved—the installer skips hook configuration if hooks already exist.
+Existing hooks are preserved—the installer merges new hooks with existing configuration.
+
+To uninstall:
+```bash
+~/.local/bin/sift-uninstall.sh
+```
 
 ### Manual Install
 
@@ -122,7 +122,11 @@ What do you know about my preferences?
 
 ### Memory
 
-[sift_memory_add](#sift_memory_add) · [sift_memory_get](#sift_memory_get) · [sift_memory_search](#sift_memory_search) · [sift_memory_list](#sift_memory_list) · [sift_memory_update](#sift_memory_update) · [sift_memory_delete](#sift_memory_delete) · [sift_memory_decide](#sift_memory_decide) · [sift_memory_decisions](#sift_memory_decisions) · [sift_memory_supersede](#sift_memory_supersede) · [sift_memory_reflect](#sift_memory_reflect) · [sift_memory_reflections](#sift_memory_reflections) · [sift_memory_reflect_trajectory](#sift_memory_reflect_trajectory) · [sift_memory_trajectory_reflections](#sift_memory_trajectory_reflections) · [sift_memory_link](#sift_memory_link) · [sift_memory_unlink](#sift_memory_unlink) · [sift_memory_deps](#sift_memory_deps) · [sift_memory_ready](#sift_memory_ready) · [sift_memory_stale](#sift_memory_stale) · [sift_memory_stats](#sift_memory_stats) · [sift_memory_context](#sift_memory_context) · [sift_memory_traverse](#sift_memory_traverse) · [sift_memory_origin](#sift_memory_origin) · [sift_memory_network](#sift_memory_network) · [sift_memory_config](#sift_memory_config) · [sift_memory_tune](#sift_memory_tune) · [sift_memory_backups](#sift_memory_backups) · [sift_memory_restore](#sift_memory_restore) · [sift_memory_import](#sift_memory_import)
+[sift_memory_add](#sift_memory_add) · [sift_memory_get](#sift_memory_get) · [sift_memory_search](#sift_memory_search) · [sift_memory_list](#sift_memory_list) · [sift_memory_update](#sift_memory_update) · [sift_memory_archive](#sift_memory_archive) · [sift_memory_synthesize](#sift_memory_synthesize) · [sift_memory_expand](#sift_memory_expand) · [sift_memory_decide](#sift_memory_decide) · [sift_memory_decisions](#sift_memory_decisions) · [sift_memory_supersede](#sift_memory_supersede) · [sift_memory_reflect](#sift_memory_reflect) · [sift_memory_reflections](#sift_memory_reflections) · [sift_memory_reflect_trajectory](#sift_memory_reflect_trajectory) · [sift_memory_trajectory_reflections](#sift_memory_trajectory_reflections) · [sift_memory_link](#sift_memory_link) · [sift_memory_unlink](#sift_memory_unlink) · [sift_memory_deps](#sift_memory_deps) · [sift_memory_ready](#sift_memory_ready) · [sift_memory_stale](#sift_memory_stale) · [sift_memory_stats](#sift_memory_stats) · [sift_memory_context](#sift_memory_context) · [sift_memory_traverse](#sift_memory_traverse) · [sift_memory_origin](#sift_memory_origin) · [sift_memory_network](#sift_memory_network) · [sift_memory_config](#sift_memory_config) · [sift_memory_tune](#sift_memory_tune) · [sift_memory_backups](#sift_memory_backups) · [sift_memory_restore](#sift_memory_restore) · [sift_memory_import](#sift_memory_import)
+
+### Context
+
+[sift_context_session](#sift_context_session) · [sift_context_save](#sift_context_save) · [sift_context_search](#sift_context_search) · [sift_context_query](#sift_context_query) · [sift_context_link](#sift_context_link) · [sift_context_synthesize](#sift_context_synthesize) · [sift_context_archive](#sift_context_archive) · [sift_context_stats](#sift_context_stats) · [sift_context_stale](#sift_context_stale) · [sift_context_memory](#sift_context_memory)
 
 ### Search & Edit
 
@@ -198,14 +202,38 @@ Mark the authentication refactor task as complete
 
 ---
 
-<a name="sift_memory_delete"></a>
-### sift_memory_delete
-Remove a memory.
+<a name="sift_memory_archive"></a>
+### sift_memory_archive
+Archive a memory.
 
-Permanently deletes a memory and its associated decisions and links. Use for outdated or incorrect information.
+Sets a memory's status to 'archived' but preserves all links, decisions, and reflections. Archived memories are excluded from list by default but remain accessible and searchable. Use `include_archived: true` in list/search to see them.
 
 ```
-Forget what you know about the old API endpoint format, we've changed it
+Archive the old authentication notes, we've moved to a new system
+```
+
+---
+
+<a name="sift_memory_synthesize"></a>
+### sift_memory_synthesize
+Consolidate multiple memories into one.
+
+Creates a new synthesis memory linking to source memories. Sources are marked as synthesized but preserved. Use for distilling lessons from multiple gotchas or summarizing completed work.
+
+```
+Combine everything you learned about the database issues into a single summary
+```
+
+---
+
+<a name="sift_memory_expand"></a>
+### sift_memory_expand
+Show sources of a synthesis.
+
+Returns the synthesis memory plus all source memories that were consolidated. Use when you need the original details behind a synthesis.
+
+```
+Show me the original memories that went into that database summary
 ```
 
 ---
@@ -552,6 +580,130 @@ Controls the workspace index: init, status, refresh, or rebuild. The index auto-
 
 ```
 Refresh the search index to pick up recent file changes
+```
+
+---
+
+## Context Tools
+
+Context tools preserve conversation history across sessions and context window compactions.
+
+<a name="sift_context_session"></a>
+### sift_context_session
+Manage conversation sessions.
+
+Start, end, get, or query sessions. Sessions track conversation context for preservation and synthesis.
+
+```
+Start tracking this conversation
+```
+
+---
+
+<a name="sift_context_save"></a>
+### sift_context_save
+Save a message or tool call.
+
+Stores important messages and tool calls to the context database with token estimates.
+
+```
+Save this important exchange about the architecture decision
+```
+
+---
+
+<a name="sift_context_search"></a>
+### sift_context_search
+Search conversation history.
+
+Full-text search across past conversations using FTS5 boolean queries.
+
+```
+What did we discuss about authentication last week?
+```
+
+---
+
+<a name="sift_context_query"></a>
+### sift_context_query
+SQL query on context database.
+
+Run SQL queries on sessions, messages, and tool_calls tables for advanced analysis.
+
+```
+Show me all sessions from this project
+```
+
+---
+
+<a name="sift_context_link"></a>
+### sift_context_link
+Link conversation to memory.
+
+Creates bidirectional relationship between a context message and a memory entry.
+
+```
+Link this conversation to the authentication plan
+```
+
+---
+
+<a name="sift_context_synthesize"></a>
+### sift_context_synthesize
+Create session summary.
+
+Stores a summary for a session while preserving full conversation for archive.
+
+```
+Summarize what we accomplished in this session
+```
+
+---
+
+<a name="sift_context_archive"></a>
+### sift_context_archive
+Archive session to cold storage.
+
+Moves verbatim messages to archive database, keeps summary in main database.
+
+```
+Archive old sessions to save space
+```
+
+---
+
+<a name="sift_context_stats"></a>
+### sift_context_stats
+Context database statistics.
+
+Shows session counts, message counts, storage size, and current session info.
+
+```
+How much conversation history do you have?
+```
+
+---
+
+<a name="sift_context_stale"></a>
+### sift_context_stale
+Find sessions needing consolidation.
+
+Two tiers: immediate (ended, no summary) and deep (has summary, no memory link). Use for periodic context maintenance.
+
+```
+What sessions need consolidation?
+```
+
+---
+
+<a name="sift_context_memory"></a>
+### sift_context_memory
+Get conversation context for a memory.
+
+Returns the full conversation that led to a memory being created, including surrounding messages.
+
+```
+Show me the conversation that led to this decision
 ```
 
 ---
