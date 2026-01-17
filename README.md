@@ -56,7 +56,7 @@ The history document demonstrates both thinking modes working together: linear c
 Interactive installer that prompts for each step (requires jq for hooks):
 
 ```bash
-bash <(curl -fsSL https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-setup.sh)
+curl -fsSL https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-setup.sh | bash
 ```
 
 The installer will prompt before each step:
