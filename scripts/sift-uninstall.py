@@ -12,7 +12,7 @@ When modifying installation logic, update ALL of these:
   1. Makefile (install/uninstall targets)
   2. scripts/sift-setup.py
   3. scripts/sift-uninstall.py
-  4. sift-releases repo assets
+  4. sift-releases repo templates
 
 See: .github/RELEASE_CHECKLIST.md
 ============================================================================

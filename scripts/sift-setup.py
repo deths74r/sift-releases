@@ -13,7 +13,7 @@ When modifying installation logic, update ALL of these:
   2. scripts/sift-setup.sh
   3. scripts/sift-setup.py
   4. scripts/sift-uninstall.py
-  5. sift-releases repo assets
+  5. sift-releases repo templates
 
 See: .github/RELEASE_CHECKLIST.md
 ============================================================================
