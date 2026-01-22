@@ -119,11 +119,24 @@ Start a new session and ask:
 What do you know about my preferences?
 ```
 
+## Data Storage
+
+Sift stores data in two locations:
+
+| Location | Purpose |
+|----------|---------|
+| `.sift/` (per-project) | Memory database, search index, context database |
+| `~/.sift/backups/<hash>/` (global) | Automatic memory database backups |
+
+**Per-project storage** (`.sift/`) is created in each project directory when you use memory or search tools. This keeps project knowledge isolated.
+
+**Global backups** (`~/.sift/backups/`) are created automatically on first memory tool access each session. Backups are identified by a hash of the project path, so they survive even if a project's `.sift/` directory is deleted. This provides recovery options if data is accidentally lost.
+
 ## Tools
 
 ### Memory
 
-[sift_memory_add](#sift_memory_add) · [sift_memory_get](#sift_memory_get) · [sift_memory_search](#sift_memory_search) · [sift_memory_list](#sift_memory_list) · [sift_memory_update](#sift_memory_update) · [sift_memory_archive](#sift_memory_archive) · [sift_memory_synthesize](#sift_memory_synthesize) · [sift_memory_expand](#sift_memory_expand) · [sift_memory_decide](#sift_memory_decide) · [sift_memory_decisions](#sift_memory_decisions) · [sift_memory_supersede](#sift_memory_supersede) · [sift_memory_reflect](#sift_memory_reflect) · [sift_memory_reflections](#sift_memory_reflections) · [sift_memory_reflect_trajectory](#sift_memory_reflect_trajectory) · [sift_memory_trajectory_reflections](#sift_memory_trajectory_reflections) · [sift_memory_link](#sift_memory_link) · [sift_memory_unlink](#sift_memory_unlink) · [sift_memory_deps](#sift_memory_deps) · [sift_memory_ready](#sift_memory_ready) · [sift_memory_stale](#sift_memory_stale) · [sift_memory_stats](#sift_memory_stats) · [sift_memory_context](#sift_memory_context) · [sift_memory_traverse](#sift_memory_traverse) · [sift_memory_origin](#sift_memory_origin) · [sift_memory_network](#sift_memory_network) · [sift_memory_config](#sift_memory_config) · [sift_memory_tune](#sift_memory_tune) · [sift_memory_backups](#sift_memory_backups) · [sift_memory_restore](#sift_memory_restore) · [sift_memory_import](#sift_memory_import)
+[sift_memory_add](#sift_memory_add) · [sift_memory_get](#sift_memory_get) · [sift_memory_search](#sift_memory_search) · [sift_memory_list](#sift_memory_list) · [sift_memory_update](#sift_memory_update) · [sift_memory_archive](#sift_memory_archive) · [sift_memory_synthesize](#sift_memory_synthesize) · [sift_memory_expand](#sift_memory_expand) · [sift_memory_decide](#sift_memory_decide) · [sift_memory_decisions](#sift_memory_decisions) · [sift_memory_supersede](#sift_memory_supersede) · [sift_memory_reflect](#sift_memory_reflect) · [sift_memory_reflections](#sift_memory_reflections) · [sift_memory_reflect_trajectory](#sift_memory_reflect_trajectory) · [sift_memory_trajectory_reflections](#sift_memory_trajectory_reflections) · [sift_memory_link](#sift_memory_link) · [sift_memory_unlink](#sift_memory_unlink) · [sift_memory_deps](#sift_memory_deps) · [sift_memory_ready](#sift_memory_ready) · [sift_memory_stale](#sift_memory_stale) · [sift_memory_stats](#sift_memory_stats) · [sift_memory_context](#sift_memory_context) · [sift_memory_traverse](#sift_memory_traverse) · [sift_memory_origin](#sift_memory_origin) · [sift_memory_network](#sift_memory_network) · [sift_memory_challenge](#sift_memory_challenge) · [sift_memory_challenge_evidence](#sift_memory_challenge_evidence) · [sift_memory_config](#sift_memory_config) · [sift_memory_tune](#sift_memory_tune) · [sift_memory_backups](#sift_memory_backups) · [sift_memory_restore](#sift_memory_restore) · [sift_memory_import](#sift_memory_import)
 
 ### Context
 
@@ -136,6 +149,10 @@ What do you know about my preferences?
 ### Web & Repository
 
 [sift_web_crawl](#sift_web_crawl) · [sift_web_search](#sift_web_search) · [sift_web_query](#sift_web_query) · [sift_web_stats](#sift_web_stats) · [sift_web_manifest](#sift_web_manifest) · [sift_web_refresh](#sift_web_refresh) · [sift_web_search_multi](#sift_web_search_multi) · [sift_web_merge](#sift_web_merge) · [sift_repo_clone](#sift_repo_clone) · [sift_repo_search](#sift_repo_search) · [sift_repo_query](#sift_repo_query) · [sift_repo_stats](#sift_repo_stats) · [sift_repo_list](#sift_repo_list)
+
+### Hardware Awareness
+
+[sift_hardware_status](#sift_hardware_status) · [sift_hardware_patterns](#sift_hardware_patterns) · [sift_hardware_events](#sift_hardware_events) · [sift_budget_request](#sift_budget_request) · [sift_budget_stats](#sift_budget_stats) · [sift_memory_sqlite_config](#sift_memory_sqlite_config) · [sift_memory_cache_status](#sift_memory_cache_status) · [sift_stream_read](#sift_stream_read) · [sift_stream_close](#sift_stream_close)
 
 ---
 
@@ -412,6 +429,29 @@ Explore memory graph structure.
 Analyzes memory connections as a network. Four modes: `hubs` (most connected), `neighbors` (direct connections), `cluster` (related memories), `bridges` (connecting separate areas).
 ```
 What are the central themes in your memory?
+```
+---
+
+<a name="sift_memory_challenge"></a>
+### sift_memory_challenge
+Challenge a claim by searching for counterevidence.
+
+Generates adversarial queries (negations, revision cues) and searches both memory and context databases for contradicting evidence. Returns a summary with assessment. Use for epistemic hygiene—verifying assumptions before acting on them.
+
+```
+Challenge the assumption that our API always returns JSON
+```
+
+---
+
+<a name="sift_memory_challenge_evidence"></a>
+### sift_memory_challenge_evidence
+Retrieve evidence from a challenge session.
+
+Returns full details of supporting evidence, counterevidence, or evolution timeline from a previous challenge. Use pagination for large result sets.
+
+```
+Show me the counterevidence from that challenge
 ```
 ---
 
@@ -863,6 +903,118 @@ Shows all repository databases in the current directory.
 
 ```
 What repositories have you indexed?
+```
+
+---
+
+## Hardware Awareness Tools
+
+Sift provides Claude with awareness of hardware resources, enabling intelligent adaptation to system constraints.
+
+<a name="sift_hardware_status"></a>
+### sift_hardware_status
+Get multi-dimensional resource state.
+
+Returns current state of memory, I/O, database, and process resources. Includes PSI (Pressure Stall Information) metrics, cgroup limits, and suggestions for adapting to current conditions.
+
+```
+What's the current resource state?
+```
+
+---
+
+<a name="sift_hardware_patterns"></a>
+### sift_hardware_patterns
+View learned access patterns.
+
+Shows tool call sequences and their probabilities. The system learns which tools tend to follow other tools for predictive optimization.
+
+```
+What patterns have you learned about my tool usage?
+```
+
+---
+
+<a name="sift_hardware_events"></a>
+### sift_hardware_events
+View logged resource events.
+
+Shows state changes, adaptations, wall hits, and diagnoses. Use to understand patterns in resource pressure and how the system adapted.
+
+```
+Show me resource events from the last hour
+```
+
+---
+
+<a name="sift_budget_request"></a>
+### sift_budget_request
+Request a resource budget.
+
+Request memory, I/O, and latency budget for an operation. Returns what's available given current system state, with constraints and suggestions.
+
+```
+Can I get 100MB for a comprehensive search?
+```
+
+---
+
+<a name="sift_budget_stats"></a>
+### sift_budget_stats
+View budget utilization statistics.
+
+Shows how actual resource usage compares to budgeted amounts, helping calibrate future budget requests.
+
+```
+How accurate have my budget estimates been?
+```
+
+---
+
+<a name="sift_memory_sqlite_config"></a>
+### sift_memory_sqlite_config
+View and configure SQLite settings.
+
+Shows mmap_size, cache_size, journal_mode, WAL status, and memory usage. Allows tuning performance parameters.
+
+```
+What are the current SQLite settings?
+```
+
+---
+
+<a name="sift_memory_cache_status"></a>
+### sift_memory_cache_status
+View memory importance and cache status.
+
+Shows memories ranked by importance score (recency, frequency, linkage, type) and eviction candidates.
+
+```
+Which memories are most important right now?
+```
+
+---
+
+<a name="sift_stream_read"></a>
+### sift_stream_read
+Read from a streaming operation.
+
+Read next chunk from a streaming result. Used for large results that exceed single response limits.
+
+```
+Read the next chunk from that stream
+```
+
+---
+
+<a name="sift_stream_close"></a>
+### sift_stream_close
+Close a stream and release resources.
+
+Closes a streaming operation and releases shared memory resources.
+
+```
+Close the search stream
 ```
 
 ---
