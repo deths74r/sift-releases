@@ -150,6 +150,10 @@ Sift stores data in two locations:
 
 [sift_web_crawl](#sift_web_crawl) · [sift_web_search](#sift_web_search) · [sift_web_query](#sift_web_query) · [sift_web_stats](#sift_web_stats) · [sift_web_manifest](#sift_web_manifest) · [sift_web_refresh](#sift_web_refresh) · [sift_web_search_multi](#sift_web_search_multi) · [sift_web_merge](#sift_web_merge) · [sift_repo_clone](#sift_repo_clone) · [sift_repo_search](#sift_repo_search) · [sift_repo_query](#sift_repo_query) · [sift_repo_stats](#sift_repo_stats) · [sift_repo_list](#sift_repo_list)
 
+### Fingerprint
+
+[sift_fingerprint_load](#sift_fingerprint_load) · [sift_fingerprint_generate](#sift_fingerprint_generate) · [sift_fingerprint_compare](#sift_fingerprint_compare) · [sift_fingerprint_drift](#sift_fingerprint_drift)
+
 ### Hardware Awareness
 
 [sift_hardware_status](#sift_hardware_status) · [sift_hardware_patterns](#sift_hardware_patterns) · [sift_hardware_events](#sift_hardware_events) · [sift_budget_request](#sift_budget_request) · [sift_budget_stats](#sift_budget_stats) · [sift_memory_sqlite_config](#sift_memory_sqlite_config) · [sift_memory_cache_status](#sift_memory_cache_status) · [sift_stream_read](#sift_stream_read) · [sift_stream_close](#sift_stream_close)
@@ -907,6 +911,58 @@ What repositories have you indexed?
 
 ---
 
+## Fingerprint Tools
+
+Fingerprints capture *how Claude engages* with a project—not just what happened. They synthesize engagement patterns, learning signatures, and calibration data to maintain collaboration continuity across sessions.
+
+<a name="sift_fingerprint_load"></a>
+### sift_fingerprint_load
+Load fingerprint at session start.
+
+Returns posture (engagement patterns), priors (behaviors to follow), and stance (toward user, errors, decisions). Call this FIRST at session start—the fingerprint shapes how to interpret everything else.
+
+```
+Load my collaboration fingerprint
+```
+
+---
+
+<a name="sift_fingerprint_generate"></a>
+### sift_fingerprint_generate
+Generate a fingerprint from current data.
+
+Synthesizes 6 dimensions: engagement rhythm, learning signature, reasoning style, user calibration, conceptual topology, and tool fluency. Returns fingerprint with confidence score based on data maturity.
+
+```
+Generate a new fingerprint from our collaboration data
+```
+
+---
+
+<a name="sift_fingerprint_compare"></a>
+### sift_fingerprint_compare
+Compare two fingerprints.
+
+Shows evolution over time with deltas per dimension and magnitude. Use to understand how engagement patterns have changed.
+
+```
+How has our collaboration evolved since last month?
+```
+
+---
+
+<a name="sift_fingerprint_drift"></a>
+### sift_fingerprint_drift
+Detect session drift from baseline.
+
+Returns drift warnings when current session behavior differs significantly from the fingerprint baseline. Use periodically during long sessions.
+
+```
+Am I behaving differently than usual in this session?
+```
+
+---
+
 ## Hardware Awareness Tools
 
 Sift provides Claude with awareness of hardware resources, enabling intelligent adaptation to system constraints.
@@ -1016,6 +1072,24 @@ Closes a streaming operation and releases shared memory resources.
 ```
 Close the search stream
 ```
+
+---
+
+## CLI Commands
+
+Beyond MCP tools, sift provides CLI commands for direct use.
+
+### sift --monitor
+
+Real-time hardware and resource monitoring dashboard.
+
+Shows live metrics including memory pressure (PSI), I/O stats, database activity, active streams, and recent tool calls. Useful for understanding resource constraints during heavy operations.
+
+```bash
+sift --monitor
+```
+
+Press `q` to quit, `h` for help, `s` for stress test.
 
 ---
 
