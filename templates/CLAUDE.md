@@ -140,7 +140,8 @@ Plans persist across sessions and are fully queryable.
 | Write | `sift_write` | Creates parent directories automatically |
 | Grep, Glob | `sift_search` | FTS5 boolean queries, 30-195x faster |
 | TodoWrite | `sift_memory_add` | Persistent across sessions, queryable |
-| WebFetch | `sift_web_crawl` + `sift_web_search` | 100-500x faster cached queries |
+| WebFetch (single) | `sift_web_fetch` | Structured data, optional caching, link extraction |
+| WebFetch (docs) | `sift_web_crawl` + `sift_web_search` | 100-500x faster cached queries |
 | sed/awk | `sift_sql` | SQL on text: regex, CSV parsing, transforms |
 ### Why This Matters
 - **Line numbers** enable precise edits without counting
@@ -149,7 +150,7 @@ Plans persist across sessions and are fully queryable.
 - **FTS5 search** uses inverted indexes instead of linear scanning
 - **Persistent memory** survives session boundaries
 
-> 📖 **Full documentation:** `~/.claude/FILE_TOOLS.md`, `~/.claude/SEARCH_TOOLS.md`
+> 📖 **Full documentation:** `~/.claude/FILE_TOOLS.md`, `~/.claude/SEARCH_TOOLS.md`, `~/.claude/WEB_TOOLS.md`
 
 ---
 
