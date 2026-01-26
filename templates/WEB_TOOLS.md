@@ -1,4 +1,4 @@
-<!-- sift-template-0.12.0-alpha-alpha-alpha -->
+<!-- sift-template-0.14.0-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha -->
 # Web Tools
 
 Crawl and cache documentation locally for instant search.
@@ -195,7 +195,33 @@ Merge multiple caches.
 
 ---
 
-## 4. TIPS
+## 4. AUTO-STREAMING
+
+Web tools automatically stream large results to prevent context overflow.
+
+| Tool | Threshold | Behavior |
+|------|-----------|----------|
+| `sift_web_search` | >30 results | Streams search results incrementally |
+| `sift_web_search_multi` | >30 results | Streams merged results incrementally |
+
+**When streaming triggers:**
+- Result count exceeds threshold
+- Hardware pressure is detected (memory/IO constraints)
+
+**Manual control with `stream` parameter:**
+```json
+{"db": "docs.db", "query": "auth", "stream": true}   // Force streaming
+{"db": "docs.db", "query": "auth", "stream": false}  // Force buffered
+```
+
+**When streaming is active:**
+- Response includes `stream_id` and `output_file` path
+- Use `sift_stream_read(stream_id)` to retrieve chunks
+- Use `sift_stream_close(stream_id)` when done
+
+---
+
+## 5. TIPS
 
 **Timing profiles:**
 - `stealth` - Slow, human-like pauses (for strict rate limiting)

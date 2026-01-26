@@ -1,4 +1,4 @@
-<!-- sift-template-0.12.0-alpha-alpha-alpha -->
+<!-- sift-template-0.14.0-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha -->
 # Memory System
 
 Persistent, queryable storage that maintains collaboration continuity across sessions. 
@@ -310,6 +310,30 @@ Keys: `weight_freq`, `weight_recency`, `weight_priority`, `weight_context`
 | `sift_memory_backups` | List backups | (none) |
 | `sift_memory_restore` | Restore backup | backup |
 | `sift_memory_import` | Import markdown | path*, type, delete_after |
+
+### Auto-Streaming
+
+Memory tools automatically stream large results to prevent context overflow. Streaming triggers when:
+- Result count exceeds threshold (typically >15 items)
+- Hardware pressure is detected
+
+| Tool | Threshold | Streams |
+|------|-----------|---------|
+| `sift_memory_list` | >15 items | Memory items |
+| `sift_memory_search` | >50 items | Search results |
+| `sift_memory_stale` | >15 items | Stale memories |
+| `sift_memory_ready` | >15 items | Ready tasks |
+| `sift_memory_reflections` | >15 items | Reflections |
+| `sift_memory_decisions` | >15 items | Decisions |
+| `sift_memory_stats` | >15 detail items | Stats details |
+| `sift_memory_context` | >15 items | Context data |
+| `sift_memory_cache_status` | >15 candidates | Eviction candidates |
+
+**Control streaming:**
+- `stream: true` - Force streaming regardless of size
+- `stream: false` - Disable auto-streaming
+
+When streaming, the tool returns a `stream_id`. Use `sift_stream_read(stream_id)` to read chunks.
 
 ---
 

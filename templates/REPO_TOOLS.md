@@ -1,4 +1,4 @@
-<!-- sift-template-0.12.0-alpha-alpha-alpha -->
+<!-- sift-template-0.14.0-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha -->
 # Repo Tools
 
 Clone and index external git repositories for searchable reference.
@@ -126,7 +126,33 @@ No parameters - scans for `*.db` files with repo structure.
 
 ---
 
-## 4. TIPS
+## 4. AUTO-STREAMING
+
+Repo tools automatically stream large results to prevent context overflow.
+
+| Tool | Threshold | Behavior |
+|------|-----------|----------|
+| `sift_repo_search` | >50 results | Streams search results incrementally |
+| `sift_repo_query` | >50 rows | Streams query results incrementally |
+
+**When streaming triggers:**
+- Result count exceeds threshold
+- Hardware pressure is detected (memory/IO constraints)
+
+**Manual control with `stream` parameter:**
+```json
+{"db": "repo.db", "query": "mutex", "stream": true}   // Force streaming
+{"db": "repo.db", "query": "mutex", "stream": false}  // Force buffered
+```
+
+**When streaming is active:**
+- Response includes `stream_id` and `output_file` path
+- Use `sift_stream_read(stream_id)` to retrieve chunks
+- Use `sift_stream_close(stream_id)` when done
+
+---
+
+## 5. TIPS
 
 **Shallow clone** (default: depth=1) is fast and sufficient for searching. Use deeper clone only if you need git history.
 

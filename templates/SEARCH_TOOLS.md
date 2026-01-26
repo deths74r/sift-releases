@@ -1,4 +1,4 @@
-<!-- sift-template-0.12.0-alpha-alpha-alpha -->
+<!-- sift-template-0.14.0-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha -->
 # Search Tools
 
 Fast full-text search across your codebase using FTS5.
@@ -116,7 +116,32 @@ Manage the workspace index (usually not needed).
 
 ---
 
-## 4. TIPS
+## 4. AUTO-STREAMING
+
+Search tools automatically stream large results to prevent context overflow.
+
+| Tool | Threshold | Behavior |
+|------|-----------|----------|
+| `sift_search` | >50 results | Streams search results incrementally |
+
+**When streaming triggers:**
+- Result count exceeds threshold
+- Hardware pressure is detected (memory/IO constraints)
+
+**Manual control with `stream` parameter:**
+```json
+{"pattern": "TODO", "stream": true}   // Force streaming
+{"pattern": "TODO", "stream": false}  // Force buffered response
+```
+
+**When streaming is active:**
+- Response includes `stream_id` and `output_file` path
+- Use `sift_stream_read(stream_id)` to retrieve chunks
+- Use `sift_stream_close(stream_id)` when done
+
+---
+
+## 5. TIPS
 
 **First search is slower** - it builds the index. Subsequent searches use the cached index.
 

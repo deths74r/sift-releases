@@ -1,4 +1,4 @@
-<!-- sift-template-0.12.0-alpha-alpha-alpha -->
+<!-- sift-template-0.14.0-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha -->
 # File Tools
 
 Read, write, and edit files with line-number precision.
@@ -177,7 +177,32 @@ Atomic multi-operation edits.
 
 ---
 
-## 4. TIPS
+## 4. AUTO-STREAMING
+
+File tools automatically stream large results to prevent context overflow.
+
+| Tool | Threshold | Behavior |
+|------|-----------|----------|
+| `sift_read` | >500 lines or >50KB | Streams file content incrementally |
+
+**When streaming triggers:**
+- File size exceeds threshold
+- Hardware pressure is detected (memory/IO constraints)
+
+**Manual control with `stream` parameter:**
+```json
+{"file": "/path/to/file.c", "stream": true}   // Force streaming
+{"file": "/path/to/file.c", "stream": false}  // Force buffered response
+```
+
+**When streaming is active:**
+- Response includes `stream_id` and `output_file` path
+- Use `sift_stream_read(stream_id)` to retrieve chunks
+- Use `sift_stream_close(stream_id)` when done
+
+---
+
+## 5. TIPS
 
 **Fuzzy whitespace matching** (default):
 - Tabs and spaces are interchangeable

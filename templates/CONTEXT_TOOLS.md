@@ -1,4 +1,4 @@
-<!-- sift-template-0.12.0-alpha-alpha-alpha -->
+<!-- sift-template-0.14.0-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha -->
 # Context Preservation Tools
 
 Preserve conversation history across context window compactions. Two-tier architecture: hot storage (context.db) for active sessions, cold storage (context_archive.db) for archived verbatim.
@@ -220,7 +220,32 @@ sift_context_query(sql: "
 
 ---
 
-## 10. TOOL REFERENCE
+## 10. AUTO-STREAMING
+
+Context tools automatically stream large results to prevent context overflow.
+
+| Tool | Threshold | Behavior |
+|------|-----------|----------|
+| `sift_context_search` | >50 results | Streams search results incrementally |
+
+**When streaming triggers:**
+- Result count exceeds threshold
+- Hardware pressure is detected (memory/IO constraints)
+
+**Manual control with `stream` parameter:**
+```json
+{"query": "auth", "stream": true}   // Force streaming
+{"query": "auth", "stream": false}  // Force buffered response
+```
+
+**When streaming is active:**
+- Response includes `stream_id` and `output_file` path
+- Use `sift_stream_read(stream_id)` to retrieve chunks
+- Use `sift_stream_close(stream_id)` when done
+
+---
+
+## 11. TOOL REFERENCE
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
