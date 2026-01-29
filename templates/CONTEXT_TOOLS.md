@@ -1,4 +1,4 @@
-<!-- sift-template-0.14.3-alpha -->
+<!-- sift-template-0.15.0-alpha -->
 # Context Preservation Tools
 
 Preserve conversation history across context window compactions. Two-tier architecture: hot storage (context.db) for active sessions, cold storage (context_archive.db) for archived verbatim.
