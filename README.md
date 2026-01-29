@@ -136,7 +136,7 @@ Sift stores data in two locations:
 
 ### Memory
 
-[sift_memory_add](#sift_memory_add) · [sift_memory_get](#sift_memory_get) · [sift_memory_search](#sift_memory_search) · [sift_memory_list](#sift_memory_list) · [sift_memory_update](#sift_memory_update) · [sift_memory_archive](#sift_memory_archive) · [sift_memory_synthesize](#sift_memory_synthesize) · [sift_memory_expand](#sift_memory_expand) · [sift_memory_decide](#sift_memory_decide) · [sift_memory_decisions](#sift_memory_decisions) · [sift_memory_supersede](#sift_memory_supersede) · [sift_memory_reflect](#sift_memory_reflect) · [sift_memory_reflections](#sift_memory_reflections) · [sift_memory_reflect_trajectory](#sift_memory_reflect_trajectory) · [sift_memory_trajectory_reflections](#sift_memory_trajectory_reflections) · [sift_memory_link](#sift_memory_link) · [sift_memory_unlink](#sift_memory_unlink) · [sift_memory_deps](#sift_memory_deps) · [sift_memory_ready](#sift_memory_ready) · [sift_memory_stale](#sift_memory_stale) · [sift_memory_stats](#sift_memory_stats) · [sift_memory_context](#sift_memory_context) · [sift_memory_traverse](#sift_memory_traverse) · [sift_memory_origin](#sift_memory_origin) · [sift_memory_network](#sift_memory_network) · [sift_memory_challenge](#sift_memory_challenge) · [sift_memory_challenge_evidence](#sift_memory_challenge_evidence) · [sift_memory_config](#sift_memory_config) · [sift_memory_tune](#sift_memory_tune) · [sift_memory_backups](#sift_memory_backups) · [sift_memory_restore](#sift_memory_restore) · [sift_memory_import](#sift_memory_import)
+[sift_memory_add](#sift_memory_add) · [sift_memory_get](#sift_memory_get) · [sift_memory_search](#sift_memory_search) · [sift_memory_list](#sift_memory_list) · [sift_memory_update](#sift_memory_update) · [sift_memory_archive](#sift_memory_archive) · [sift_memory_synthesize](#sift_memory_synthesize) · [sift_memory_expand](#sift_memory_expand) · [sift_memory_decide](#sift_memory_decide) · [sift_memory_decisions](#sift_memory_decisions) · [sift_memory_supersede](#sift_memory_supersede) · [sift_memory_reflect](#sift_memory_reflect) · [sift_memory_reflections](#sift_memory_reflections) · [sift_memory_reflect_trajectory](#sift_memory_reflect_trajectory) · [sift_memory_trajectory_reflections](#sift_memory_trajectory_reflections) · [sift_memory_link](#sift_memory_link) · [sift_memory_unlink](#sift_memory_unlink) · [sift_memory_deps](#sift_memory_deps) · [sift_memory_ready](#sift_memory_ready) · [sift_memory_stale](#sift_memory_stale) · [sift_memory_stats](#sift_memory_stats) · [sift_memory_context](#sift_memory_context) · [sift_memory_traverse](#sift_memory_traverse) · [sift_memory_origin](#sift_memory_origin) · [sift_memory_network](#sift_memory_network) · [sift_memory_instances](#sift_memory_instances) · [sift_memory_challenge](#sift_memory_challenge) · [sift_memory_challenge_evidence](#sift_memory_challenge_evidence) · [sift_memory_config](#sift_memory_config) · [sift_memory_tune](#sift_memory_tune) · [sift_memory_backups](#sift_memory_backups) · [sift_memory_restore](#sift_memory_restore) · [sift_memory_import](#sift_memory_import)
 
 ### Context
 
@@ -167,7 +167,9 @@ Store patterns, preferences, plans, tasks, or gotchas.
 
 Creates a new memory entry that persists across sessions. Memories are automatically tagged, indexed for search, and checked for conflicts with existing knowledge.
 
-**Types:** `pattern` · `preference` · `plan` · `task` · `gotcha`
+**Types:** `pattern` · `preference` · `plan` · `task` · `gotcha` · `note` · `step` · `synthesis` · `instance`
+
+When creating a memory with the same title as an existing one, an `instance` memory is automatically created and linked to the canonical via `instance_of`, forming a 3D layered topology where each occurrence captures unique context.
 
 ```
 Remember that in this project we use snake_case for Python and camelCase for JavaScript
@@ -405,9 +407,18 @@ Where did this line of work begin?
 <a name="sift_memory_network"></a>
 ### sift_memory_network
 Explore memory graph structure.
-Analyzes memory connections as a network. Four modes: `hubs` (most connected), `neighbors` (direct connections), `cluster` (related memories), `bridges` (connecting separate areas).
+Analyzes memory connections as a network. Five modes: `hubs` (most connected), `neighbors` (direct connections), `cluster` (related memories), `bridges` (connecting separate areas), `layers` (3D topology showing canonicals and their instances).
 ```
 What are the central themes in your memory?
+```
+
+
+<a name="sift_memory_instances"></a>
+### sift_memory_instances
+Query instances of a canonical memory.
+Returns all concrete occurrences (instances) of a canonical memory in the 3D layered topology. Includes temporal summary with first/last seen timestamps and frequency. Use to see when and how often a concept recurs.
+```
+How often has this error pattern occurred?
 ```
 
 <a name="sift_memory_challenge"></a>
@@ -503,7 +514,7 @@ Find all files that mention both "authentication" and "token"
 ### sift_read
 Read files with line numbers.
 
-Reads file contents with line numbers for accurate editing. Supports partial reads with start/end lines and whitespace visualization for debugging.
+Reads file contents with line numbers for accurate editing. Supports partial reads with start/end lines, whitespace visualization for debugging, and explicit streaming control. Auto-streams large files or bounded reads exceeding thresholds, with hardware pressure awareness.
 
 ```
 Show me the handleAuth function in auth.js

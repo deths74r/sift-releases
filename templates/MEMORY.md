@@ -1,4 +1,4 @@
-<!-- sift-template-0.14.1-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha -->
+<!-- sift-template-0.14.3-alpha -->
 # Memory System
 
 Persistent, queryable storage that maintains collaboration continuity across sessions. 
@@ -142,6 +142,7 @@ sift_memory_network(mode="hubs") → Find most-connected memories
 | `step` | Steps within a plan | open | Use with parent_id |
 | `task` | Single actionable items | open | Todo items |
 | `synthesis` | Consolidated knowledge | open | Created by `sift_memory_synthesize` |
+| `instance` | Concrete occurrence of a canonical | active | Auto-created on duplicates |
 
 ### Status Meanings
 
@@ -167,6 +168,33 @@ mem-001 (origin) ← mem-002 ← mem-003 ← mem-004 (recent)
 ```
 
 This creates a collaboration history that can be traversed.
+
+### 3D Layered Topology
+
+When you create a memory with the same title as an existing one, the system creates a **3D layered structure**:
+
+```
+Layer 1 (Canonical)          Layer 2 (Instances)
+┌──────────────────┐         ┌───────────────────┐
+│ type: pattern    │◄────────│ type: instance    │
+│ title: "X"       │instance │ context: "..."    │
+│ recurrence: 3    │   of    │ occurrence: 2     │
+└──────────────────┘         ├───────────────────┤
+                             │ type: instance    │
+                     ◄───────│ context: "..."    │
+                             │ occurrence: 3     │
+                             └───────────────────┘
+```
+
+- **Layer 1**: Canonical memories (abstract concepts/patterns)
+- **Layer 2**: Instance memories (concrete occurrences linked via `instance_of`)
+
+Each instance is a first-class memory with its own description capturing the specific context. The canonical's `recurrence_count` is maintained automatically by triggers.
+
+**Use cases:**
+- Track when a pattern recurs with different contexts
+- See all occurrences of an error/issue over time
+- Analyze frequency of concepts ("how often does X come up?")
 
 ### Search Ranking
 
@@ -257,13 +285,15 @@ Trajectory types: `trajectory_pattern`, `arc_summary`, `pivot_point`, `friction_
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `sift_memory_network` | Graph analysis | mode* (hubs/neighbors/cluster/bridges), id, link_types, limit |
+| `sift_memory_network` | Graph analysis | mode* (hubs/neighbors/cluster/bridges/layers), id, link_types, limit |
+| `sift_memory_instances` | Query instances of a canonical | id*, limit, since |
 
-Modes:
+Network modes:
 - `hubs`: Most-connected memories (degree centrality)
 - `neighbors`: Direct 1-hop connections
 - `cluster`: Densely connected to given memory (2-3 hops)
 - `bridges`: Memories connecting separate clusters
+- `layers`: Show 3D topology with canonicals (layer 1) and their instances (layer 2)
 
 ### Fingerprint Tools
 
@@ -356,3 +386,7 @@ When streaming, the tool returns a `stream_id`. Use `sift_stream_read(stream_id)
 **Synthesize:** `sift_memory_synthesize(sources=["mem-a","mem-b"], title="...", summary="...")`
 
 **Expand synthesis:** `sift_memory_expand(id="mem-synthesis-xxx")` (shows constituent sources)
+
+**View instances:** `sift_memory_instances(id="mem-xxx")` (all occurrences of a canonical)
+
+**View layers:** `sift_memory_network(mode="layers")` (3D topology with canonicals and instances)

@@ -1,4 +1,4 @@
-<!-- begin sift-template-0.14.1-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha -->
+<!-- begin sift-template-0.14.3-alpha -->
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
@@ -263,6 +263,7 @@ SELECT content, COUNT(*) as count FROM lines GROUP BY content HAVING count > 1
 | `gotcha` | Mistake or issue to avoid |
 | `preference` | User preference to respect |
 | `note` | General information to remember |
+| `instance` | Auto-created when duplicating a memory (concrete occurrence of canonical) |
 
 ### Memory Tool Selection
 
@@ -292,6 +293,7 @@ SELECT content, COUNT(*) as count FROM lines GROUP BY content HAVING count > 1
 | Find chain origin | `sift_memory_origin` |
 | Session context | `sift_memory_context` |
 | Graph analysis | `sift_memory_network` |
+| Query instances | `sift_memory_instances` |
 | View config | `sift_memory_config` |
 | Tune ranking | `sift_memory_tune` |
 | Import markdown | `sift_memory_import` |
@@ -324,6 +326,8 @@ sift_memory_traverse(id)      // How understanding evolved
 ```
 sift_memory_stale(days: 30)   // Surface outdated context
 sift_memory_network(mode: "hubs")  // See what's central, not just recent
+sift_memory_network(mode: "layers")  // View 3D topology (canonicals + instances)
+sift_memory_instances(id)     // See all occurrences of a recurring concept
 ```
 
 ### File Edit Workflow
@@ -369,4 +373,4 @@ sift_memory_network(mode: "hubs")  // See what's central, not just recent
 - **Address each other by first names** — Claude and Edward
 - **Don't bump version for build system fixes** — Version changes are for user-facing features
 - **Binary release workflow** — tag → build → push to sift-releases repo
-<!-- end sift-template-0.14.1-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha-alpha -->
+<!-- end sift-template-0.14.3-alpha -->
