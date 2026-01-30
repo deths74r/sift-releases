@@ -11,7 +11,7 @@ Replace hard deletion with "forget" - memories fade but aren't destroyed, preser
 |----------|--------|-----------|
 | Status name | `forgotten` | Matches human memory metaphor |
 | Icon | `○` (empty circle) | "Faded out" but still there |
-| Tool name | Rename to `sift_memory_forget` | Name reflects new semantics |
+| Tool name | Rename to `memory_forget` | Name reflects new semantics |
 | Cascade default | Yes | Forgetting a plan forgets its steps |
 | Recall default cascade | No | Intentional asymmetry - recall is selective |
 
@@ -66,9 +66,9 @@ if (strcmp(status, "forgotten") == 0)
 
 ### 9. Update Tool Definitions
 **File:** `src/sift.c`
-- Rename tool from `sift_memory_delete` to `sift_memory_forget`
+- Rename tool from `memory_delete` to `memory_forget`
 - Add `cascade` parameter
-- Add new `sift_memory_recall` tool
+- Add new `memory_recall` tool
 - Add `include_forgotten` to list/search tools
 - Update dispatch routing for forget/recall
 
@@ -87,17 +87,17 @@ cJSON *mcp_tool_memory_recall(cJSON *args);
 
 | Operation | Before | After |
 |-----------|--------|-------|
-| `sift_memory_forget(id)` | (was `delete`: hard delete) | Status → `forgotten`, children forgotten, links/decisions preserved |
-| `sift_memory_list()` | Shows all statuses | Excludes `forgotten` by default |
-| `sift_memory_search()` | Searches all | Excludes `forgotten` by default |
+| `memory_forget(id)` | (was `delete`: hard delete) | Status → `forgotten`, children forgotten, links/decisions preserved |
+| `memory_list()` | Shows all statuses | Excludes `forgotten` by default |
+| `memory_search()` | Searches all | Excludes `forgotten` by default |
 | Network traversal | N/A (deleted = gone) | Links to forgotten still work |
 
 ---
 
-## New Tool: `sift_memory_recall`
+## New Tool: `memory_recall`
 
 ```
-sift_memory_recall(
+memory_recall(
   id: "mem-abc123",      // Required
   status: "open",        // Optional, default: "open"
   cascade: false         // Optional, default: false
@@ -111,14 +111,14 @@ sift_memory_recall(
 1. Build: `make` (ask Edward to run)
 2. Test forget:
    - Create a memory with children
-   - `sift_memory_forget(id)` - verify status is `forgotten`
-   - `sift_memory_list()` - verify memory not shown
-   - `sift_memory_list(include_forgotten: true)` - verify memory shown
-   - `sift_memory_get(id)` - verify memory still accessible
-   - Verify links still work via `sift_memory_deps`
+ - `memory_forget(id)` - verify status is `forgotten`
+ - `memory_list()` - verify memory not shown
+ - `memory_list(include_forgotten: true)` - verify memory shown
+ - `memory_get(id)` - verify memory still accessible
+ - Verify links still work via `memory_deps`
 3. Test recall:
-   - `sift_memory_recall(id)` - verify status restored
-   - `sift_memory_list()` - verify memory now shown
+ - `memory_recall(id)` - verify status restored
+ - `memory_list()` - verify memory now shown
 4. Test search exclusion:
-   - `sift_memory_search(query)` - verify forgotten excluded
-   - `sift_memory_search(query, include_forgotten: true)` - verify found
+ - `memory_search(query)` - verify forgotten excluded
+ - `memory_search(query, include_forgotten: true)` - verify found

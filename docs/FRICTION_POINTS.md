@@ -34,19 +34,19 @@ sed 's/int n;/int written;/g'
 sed 's/size_t n;/size_t written;/g'
 ```
 
-**Recommendation:** For variable renaming in C code, prefer tools that understand C syntax (like `clang-rename` or semantic search/replace) over regex-based tools. Alternatively, use sift_edit with SQL mode for more precise matching.
+**Recommendation:** For variable renaming in C code, prefer tools that understand C syntax (like `clang-rename` or semantic search/replace) over regex-based tools. Alternatively, use edit with SQL mode for more precise matching.
 
 ---
 
-### sift_edit vs sed for Bulk Replacements
+### edit vs sed for Bulk Replacements
 
-**Observation:** For bulk variable renaming across files, `sed -i` was faster to invoke but more error-prone. `sift_edit` with `replace_all: true` would be safer but requires more invocations.
+**Observation:** For bulk variable renaming across files, `sed -i` was faster to invoke but more error-prone. `edit` with `replace_all: true` would be safer but requires more invocations.
 
 **Trade-off:**
 - `sed`: Fast, but no syntax awareness, can break code
-- `sift_edit`: Safer fuzzy matching, but one file at a time
+- `edit`: Safer fuzzy matching, but one file at a time
 
-**Potential improvement:** A `sift_refactor` tool that understands C variable scoping could make bulk renames safer.
+**Potential improvement:** A `refactor` tool that understands C variable scoping could make bulk renames safer.
 
 ---
 
@@ -84,7 +84,7 @@ sed -i '1a\#define FOO 42' file.c
 sed -i '/^#include/a\#define FOO 42' file.c
 ```
 
-**Better approach:** Use `sift_edit` with `insert_after` specifying a line number after reviewing the file structure.
+**Better approach:** Use `edit` with `insert_after` specifying a line number after reviewing the file structure.
 
 ---
 
@@ -109,7 +109,7 @@ sed -i '/^#include/a\#define FOO 42' file.c
 **Example failure pattern:**
 ```bash
 unexpand -t 2 file.c > /tmp/temp.c && mv /tmp/temp.c file.c
-# Later sed or sift_update changes get lost if another unexpand runs
+# Later sed or update changes get lost if another unexpand runs
 ```
 
 **Root cause:** The `unexpand` command reads from disk, so any in-progress edits not yet flushed can be lost.

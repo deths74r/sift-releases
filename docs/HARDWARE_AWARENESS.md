@@ -31,7 +31,7 @@ The Hardware-Aware Memory System enables Claude to perceive hardware constraints
 
 ## Tools
 
-### sift_hardware_status
+### hardware_status
 
 Get multi-dimensional hardware resource state.
 
@@ -60,7 +60,7 @@ Get multi-dimensional hardware resource state.
 }
 ```
 
-### sift_hardware_patterns
+### hardware_patterns
 
 View learned access patterns for predictive warming.
 
@@ -71,7 +71,7 @@ The system tracks tool call sequences and their probabilities. When a pattern is
 - `search` → `get` (45%)
 - `challenge` → `challenge_evidence` (95%)
 
-### sift_hardware_events
+### hardware_events
 
 Query resource event history for learning from past experiences.
 
@@ -86,7 +86,7 @@ Query resource event history for learning from past experiences.
 - `event_type` - Filter by type (optional)
 - `limit` - Maximum events to return (default: 50)
 
-### sift_budget_request
+### budget_request
 
 Request a resource budget before expensive operations.
 
@@ -121,7 +121,7 @@ Request a resource budget before expensive operations.
 }
 ```
 
-### sift_budget_stats
+### budget_stats
 
 View budget utilization statistics.
 
@@ -133,7 +133,7 @@ Shows how actual resource usage compares to budgeted amounts, enabling calibrati
 - Utilization by operation type
 - Recent over-budget operations
 
-### sift_memory_sqlite_config
+### memory_sqlite_config
 
 View and configure SQLite settings for the memory database.
 
@@ -147,7 +147,7 @@ View and configure SQLite settings for the memory database.
 - `mmap_size_mb` - Set mmap size (1-1024 MB)
 - `cache_size_mb` - Set cache size (1-256 MB)
 
-### sift_memory_cache_status
+### memory_cache_status
 
 View cache status and eviction candidates.
 
@@ -163,7 +163,7 @@ Memories are scored by importance using four factors:
 - Total memories
 - Recommendations
 
-### sift_stream_read
+### stream_read
 
 Read next chunk from a streaming operation.
 
@@ -177,7 +177,7 @@ Used for large results that exceed single response limits. Streams use shared me
 - `bytes_read` - Bytes in this chunk
 - `done` - Whether stream is complete
 
-### sift_stream_close
+### stream_close
 
 Close a stream and release resources.
 

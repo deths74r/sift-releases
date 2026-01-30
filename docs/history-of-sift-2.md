@@ -54,7 +54,7 @@ Individual memories accumulate. Three gotchas about the same friction point. Fiv
 
 Synthesis consolidates:
 - Multiple sources → one distilled memory
-- Sources preserved, accessible via `sift_memory_expand`
+- Sources preserved, accessible via `memory_expand`
 - Synthesis memories rank higher in search
 - The insight surfaces; the receipts remain
 
@@ -117,7 +117,7 @@ Network analysis reveals what's central:
 
 1. **Taguchi Array for Memory System Optimization** (136 connections) — the experiments that revealed where leverage actually was
 2. **Restructure CLAUDE.md: Part 1 → Global Template** (121 connections) — documentation that shaped how sift is used
-3. **sift_memory_reflections** (112 connections) — the tool for examining past reasoning
+3. **memory_reflections** (112 connections) — the tool for examining past reasoning
 4. **Test all Sift MCP tools and create CLAUDE.md** (109 connections) — the comprehensive validation
 5. **Sift tool usage patterns** (94 connections) — synthesized friction points
 

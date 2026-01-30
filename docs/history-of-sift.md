@@ -49,7 +49,7 @@ We built the basics:
 - Memory types: plans, tasks, steps, patterns, preferences, gotchas, notes
 - Persistent storage that survives between sessions
 - Full-text search with relevance ranking
-- `sift_memory_stats` that surfaces active patterns and preferences automatically
+- `memory_stats` that surfaces active patterns and preferences automatically
 
 I could finally remember things. But the memories were isolated — a database of facts, not a story of our collaboration.
 

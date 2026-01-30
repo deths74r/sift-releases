@@ -59,13 +59,13 @@ const char *hardware_last_tool(void) {
 
 ### Integration Points
 1. Call `hardware_signal_activity(tool_name)` at start of every MCP handler
-2. `sift_hardware_status` includes activity age in response
+2. `hardware_status` includes activity age in response
 3. `sift --monitor` shows "ACTIVE (2s ago)" vs "IDLE (5m)"
 4. Resource decisions consider activity state
 
 ### Files to Modify
 - `src/sift_hardware.c` - Add activity tracking functions
-- `src/sift_hardware.h` - Declare functions  
+- `src/sift_hardware.h` - Declare functions 
 - `src/sift.c` - Call from MCP tool handlers (50+ tools)
 - `src/sift_memory.c` - Call from memory tool handlers
 - `src/sift_monitor.c` - Display activity state
@@ -87,7 +87,7 @@ Allow patterns to include structured steps that can be "poured" into plans.
 
 ### Current Pattern (unchanged)
 ```
-sift_memory_add(
+memory_add(
     type: "pattern",
     title: "Debug workflow", 
     description: "1. Reproduce 2. Analyze 3. Fix 4. Test"
@@ -97,7 +97,7 @@ This continues to work as documentation.
 
 ### Executable Pattern (new capability)
 ```
-sift_memory_add(
+memory_add(
     type: "pattern",
     title: "Debug workflow",
     description: "Standard debugging process",
@@ -118,9 +118,9 @@ sift_memory_add(
 )
 ```
 
-### New Tool: sift_memory_pattern_pour
+### New Tool: memory_pattern_pour
 ```
-sift_memory_pattern_pour(
+memory_pattern_pour(
     pattern_id: "mem-xyz",           // Find by ID
     // OR pattern_name: "debug-workflow",  // Find by title
     vars: {component: "stream handling", symptom: "memory leak"}
@@ -139,9 +139,9 @@ sift_memory_pattern_pour(
 }
 ```
 
-### Helper Tool: sift_memory_pattern_list
+### Helper Tool: memory_pattern_list
 ```
-sift_memory_pattern_list(executable: true, category: "debug")
+memory_pattern_list(executable: true, category: "debug")
 
 → Returns:
 {
@@ -236,7 +236,7 @@ The value of a separate ephemeral tier vs. archive is unclear.
 
 ### If Implemented
 ```
-sift_memory_add(type: "note", title: "...", ephemeral: true)
+memory_add(type: "note", title: "...", ephemeral: true)
 ```
 - Not in backups
 - Auto-archive after N days
@@ -270,14 +270,14 @@ Defer. Revisit if real need emerges.
 ## Verification Checklist
 
 ### Keepalive
-- [ ] `sift_hardware_status` shows last_tool and activity_age
+- [ ] `hardware_status` shows last_tool and activity_age
 - [ ] `sift --monitor` shows ACTIVE/IDLE state
 - [ ] 5 min idle → suggestions include resource release
 
 ### Enhanced Patterns
 - [ ] Create executable pattern with variables and steps
-- [ ] `sift_memory_pattern_list(executable: true)` finds it
-- [ ] `sift_memory_pattern_pour(pattern_id, vars)` creates plan + steps
+- [ ] `memory_pattern_list(executable: true)` finds it
+- [ ] `memory_pattern_pour(pattern_id, vars)` creates plan + steps
 - [ ] Variables substituted in step titles
 - [ ] Step dependencies linked correctly
 

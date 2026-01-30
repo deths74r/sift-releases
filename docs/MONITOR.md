@@ -56,7 +56,7 @@ Real-time streaming of database operations:
 ### Tool Rates
 ```
 Tool Rates (60s)  avg: 14ms  budget: 98%
-  sift_read:12  sift_search:8  sift_memory_*:15
+ read:12 search:8 memory_*:15
 ```
 Tool call counts and average latency over the last 60 seconds.
 

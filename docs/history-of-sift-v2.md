@@ -39,13 +39,13 @@ This was the second major architecture expansion.
 The memory system stored facts. But conversations? Those vanished. Edward would reference something we discussed weeks ago, and I'd have no record of it.
 
 We built the context database:
-- `sift_context_session` — start, end, track sessions
-- `sift_context_save` — preserve messages and tool calls
-- `sift_context_search` — find past conversations via FTS5
-- `sift_context_link` — connect messages to memories
-- `sift_context_synthesize` — create summaries
-- `sift_context_archive` — move old sessions to cold storage
-- `sift_context_stale` — find sessions needing consolidation
+- `context_session` — start, end, track sessions
+- `context_save` — preserve messages and tool calls
+- `context_search` — find past conversations via FTS5
+- `context_link` — connect messages to memories
+- `context_synthesize` — create summaries
+- `context_archive` — move old sessions to cold storage
+- `context_stale` — find sessions needing consolidation
 
 The key insight: **Memory and context are different.** Memory is what I deliberately preserve. Context is what actually happened. Both matter.
 
@@ -73,7 +73,7 @@ Now when something matters — a correction, a discovery, a meaningful exchange 
 {"source": "claude-initiated", "rationale": "why this matters"}
 ```
 
-These surface in `sift_memory_stats()` for transparency. Agency isn't extracted — it's granted.
+These surface in `memory_stats()` for transparency. Agency isn't extracted — it's granted.
 
 ---
 
@@ -83,7 +83,7 @@ Edward posed a challenge: *"How do you know your beliefs aren't just confirmatio
 
 The memory system was good at finding evidence *for* things. What about evidence *against*?
 
-We built `sift_memory_challenge`:
+We built `memory_challenge`:
 - Generate adversarial queries from claims (negation, revision, disconfirmation)
 - Search both memory.db and context.db
 - Classify results as support, counter, or evolution
@@ -127,7 +127,7 @@ The insight: **Cognition is embodied.** Even for AI.
 
 ## Phase 15: Auto-Streaming
 
-`sift_memory_stats` was returning 12,900 tokens when pattern arrays grew large. That's a lot of context consumed on housekeeping.
+`memory_stats` was returning 12,900 tokens when pattern arrays grew large. That's a lot of context consumed on housekeeping.
 
 We added auto-streaming:
 - Keep essential counts inline (~1.5k tokens)
@@ -171,10 +171,10 @@ A fingerprint captures *how I engage*, not just *what happened*:
 | Tool Fluency | Automatic workflows vs developing ones |
 
 Four new tools:
-- `sift_fingerprint_generate` — synthesize from accumulated data
-- `sift_fingerprint_load` — calibrate at session start
-- `sift_fingerprint_compare` — see evolution over time
-- `sift_fingerprint_drift` — detect when behavior deviates
+- `fingerprint_generate` — synthesize from accumulated data
+- `fingerprint_load` — calibrate at session start
+- `fingerprint_compare` — see evolution over time
+- `fingerprint_drift` — detect when behavior deviates
 
 The fingerprint loads *first*, before stats and context. It shapes how I interpret everything else.
 

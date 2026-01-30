@@ -27,7 +27,7 @@ The fingerprint is **calibration, not facts**. Priors, stance, posture.
 
 ## New Tools
 
-### `sift_fingerprint_generate`
+### `fingerprint_generate`
 
 Compute fingerprint from current data. Synthesizes all dimensions from existing tables.
 
@@ -40,7 +40,7 @@ Compute fingerprint from current data. Synthesizes all dimensions from existing 
 6. Fluency: top sequences, entropy, fluent (>80%) vs learning (<50%) tools
 7. Confidence: `min(1.0, sessions/20) * min(1.0, memories/100)`
 
-### `sift_fingerprint_load`
+### `fingerprint_load`
 
 Load fingerprint for session start. Returns priors, stance, posture.
 
@@ -67,11 +67,11 @@ Load fingerprint for session start. Returns priors, stance, posture.
 }
 ```
 
-### `sift_fingerprint_compare`
+### `fingerprint_compare`
 
 Compare two fingerprint versions to see evolution over time.
 
-### `sift_fingerprint_drift`
+### `fingerprint_drift`
 
 Detect if current session behavior differs significantly from fingerprint.
 
@@ -79,13 +79,13 @@ Detect if current session behavior differs significantly from fingerprint.
 
 ```
 Before:
-  sift_memory_stats()    → WHAT exists
-  sift_memory_context()  → WHERE we are
+ memory_stats() → WHAT exists
+ memory_context() → WHERE we are
 
 After:
-  sift_fingerprint_load() → WHO I am (priors, stance, posture)  ← NEW
-  sift_memory_stats()     → WHAT exists
-  sift_memory_context()   → WHERE we are
+ fingerprint_load() → WHO I am (priors, stance, posture) ← NEW
+ memory_stats() → WHAT exists
+ memory_context() → WHERE we are
 ```
 
 Fingerprint loads **first** because it shapes how to interpret everything else.

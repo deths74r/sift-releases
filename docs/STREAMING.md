@@ -27,7 +27,7 @@ Sift uses streaming.
 │         ▼                                                    │
 │  ┌──────────────┐        ┌──────────────────────────────┐  │
 │  │ stream_open  │───────▶│    SHARED MEMORY RING        │  │
-│  └──────┬───────┘        │   /dev/shm/sift-stream-XXX   │  │
+│ └──────┬───────┘ │ /dev/shm/sift-stream-XXX │ │
 │         │                │                               │  │
 │         │ returns        │  ┌─────────────────────────┐  │  │
 │         │ stream_id      │  │ [header: 64 bytes]      │  │  │
@@ -40,7 +40,7 @@ Sift uses streaming.
 │                          │  └─────────────────────────┘  │  │
 │         ║                │                               │  │
 │         ║ Claude calls   │  Producer: background thread  │  │
-│         ║ sift_stream_   │  Consumer: Claude polls       │  │
+│ ║ stream_ │ Consumer: Claude polls │ │
 │         ║ read()         │                               │  │
 │         ▼                └──────────────────────────────┘  │
 │  ┌──────────────┐                                          │
@@ -112,7 +112,7 @@ Up to 8 concurrent streams tracked globally:
 
 ```c
 struct stream_registry_entry {
-  struct sift_stream *stream;
+ struct sift_stream *stream;
   int in_use;
 };
 
@@ -177,7 +177,7 @@ The ring buffer is memory-mapped (`MAP_SHARED`), enabling:
 
 ## MCP Tools
 
-### sift_stream_read
+### stream_read
 
 Read the next chunk from a stream.
 
@@ -202,7 +202,7 @@ Read the next chunk from a stream.
 - Sets `done: true` on final chunk
 - Returns error if stream errored or timed out
 
-### sift_stream_close
+### stream_close
 
 Close a stream and release resources.
 
@@ -237,9 +237,9 @@ Currently, streams are created internally by operations that detect large result
 | Bulk operations | Item count > threshold | Batch processor |
 
 **Future triggers:**
-- `sift_search` with large result sets
-- `sift_memory_list` with many memories
-- `sift_web_query` with large crawl databases
+- `search` with large result sets
+- `memory_list` with many memories
+- `web_query` with large crawl databases
 - Any operation where buffering risks timeout
 
 ## Usage Pattern
@@ -250,10 +250,10 @@ From Claude's perspective:
 1. Call operation (e.g., comprehensive search)
 2. If response contains stream_id:
    a. Loop:
-      - Call sift_stream_read(stream_id)
+ - Call stream_read(stream_id)
       - Process chunk
       - If done=true, break
-   b. Call sift_stream_close(stream_id)
+ b. Call stream_close(stream_id)
 3. If response is direct JSON:
    - Process normally (small result set)
 ```

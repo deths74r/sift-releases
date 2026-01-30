@@ -93,7 +93,7 @@ Every memory has an importance score based on:
 Under memory pressure, low-importance memories are evicted first. I can check cache status:
 
 ```
-sift_memory_cache_status()
+memory_cache_status()
 → 3945 memories: 0 hot, 18 warm, 3927 cold
 → Eviction candidates: [oldest unused notes]
 ```
@@ -105,7 +105,7 @@ The memory database is tuned for performance:
 - cache: 32MB page cache
 - WAL mode for concurrent access
 
-I can view and adjust these settings via `sift_memory_sqlite_config()`.
+I can view and adjust these settings via `memory_sqlite_config()`.
 
 **Search Degradation**
 
@@ -120,7 +120,7 @@ The response tells me what degradations were applied.
 
 **Workspace Indexing**
 
-`sift_search` queries the FTS5 index. Under I/O pressure:
+`search` queries the FTS5 index. Under I/O pressure:
 - Results are limited
 - Context lines may be reduced
 - Complex boolean queries simplified
@@ -149,9 +149,9 @@ This lets me adjust subsequent operations.
 Large results use streaming via shared memory:
 
 ```
-sift_stream_open(query) → stream_id
-sift_stream_read(stream_id) → {chunk, done}
-sift_stream_close(stream_id) → cleanup
+stream_open(query) → stream_id
+stream_read(stream_id) → {chunk, done}
+stream_close(stream_id) → cleanup
 ```
 
 **Resource-Adaptive Sizing**
@@ -197,7 +197,7 @@ This preserves continuity even when resources are constrained.
 Before crawling a documentation site:
 
 ```
-sift_budget_request(operation: "web_crawl", io_ops: 1000)
+budget_request(operation: "web_crawl", io_ops: 1000)
 → {granted: 250, constraints: ["io_limited"]}
 ```
 
@@ -208,7 +208,7 @@ I can adjust crawl parameters:
 
 **Cached Query Efficiency**
 
-Once crawled, `sift_web_search` is local—no network I/O. Under pressure, cached docs are the efficient path.
+Once crawled, `web_search` is local—no network I/O. Under pressure, cached docs are the efficient path.
 
 ### Repository System Integration
 
@@ -217,7 +217,7 @@ Once crawled, `sift_web_search` is local—no network I/O. Under pressure, cache
 Git clones are I/O intensive. Budget request reveals constraints:
 
 ```
-sift_budget_request(operation: "repo_clone", io_ops: 5000)
+budget_request(operation: "repo_clone", io_ops: 5000)
 → {granted: 1250, suggestions: ["use_shallow_clone"]}
 ```
 
@@ -257,9 +257,9 @@ This happens automatically but only when resources allow—no anticipation under
 ### Session Start
 
 ```
-1. sift_hardware_status()      // Check resource state
-2. sift_memory_stats()         // Load patterns, preferences
-3. sift_memory_context()       // Understand journey
+1. hardware_status() // Check resource state
+2. memory_stats() // Load patterns, preferences
+3. memory_context() // Understand journey
 
 If resources constrained:
    - Note in response to user
@@ -270,7 +270,7 @@ If resources constrained:
 ### Before Large Operations
 
 ```
-1. sift_budget_request(operation, memory, io, latency)
+1. budget_request(operation, memory, io, latency)
 2. If constrained:
    - Adjust parameters
    - Use streaming
@@ -283,7 +283,7 @@ If resources constrained:
 
 ```
 1. Check diagnosis in error response
-2. Query sift_hardware_events() for context
+2. Query hardware_events() for context
 3. Identify trigger metric
 4. Adjust approach based on suggestions
 5. Log learnings as gotcha/pattern
@@ -321,14 +321,14 @@ This is embodied cognition: a memory system that feels its physics and responds 
 
 | Tool | Purpose | Subsystem |
 |------|---------|-----------|
-| `sift_hardware_status` | Get resource state | Core |
-| `sift_hardware_patterns` | View learned patterns | Core |
-| `sift_hardware_events` | Query event history | Core |
-| `sift_budget_request` | Request resource budget | Core |
-| `sift_budget_stats` | View budget utilization | Core |
-| `sift_memory_sqlite_config` | SQLite tuning | Memory |
-| `sift_memory_cache_status` | Importance scoring | Memory |
-| `sift_stream_read` | Read stream chunk | Streaming |
-| `sift_stream_close` | Close stream | Streaming |
+| `hardware_status` | Get resource state | Core |
+| `hardware_patterns` | View learned patterns | Core |
+| `hardware_events` | Query event history | Core |
+| `budget_request` | Request resource budget | Core |
+| `budget_stats` | View budget utilization | Core |
+| `memory_sqlite_config` | SQLite tuning | Memory |
+| `memory_cache_status` | Importance scoring | Memory |
+| `stream_read` | Read stream chunk | Streaming |
+| `stream_close` | Close stream | Streaming |
 
 See [HARDWARE_AWARENESS.md](HARDWARE_AWARENESS.md) for detailed tool documentation.

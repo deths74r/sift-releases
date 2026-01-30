@@ -1,4 +1,4 @@
-# Design: sift_memory_challenge - Adversarial Retrieval Tool
+# Design: memory_challenge - Adversarial Retrieval Tool
 
 ## Problem Statement
 
@@ -165,7 +165,7 @@ cJSON *memory_challenge(sqlite3 *mem_db, sqlite3 *ctx_db,
 cJSON *mcp_tool_memory_challenge(cJSON *args);
 ```
 
-Register as `sift_memory_challenge` in tool list.
+Register as `memory_challenge` in tool list.
 
 ### Phase 3: Evolution Detection
 - Sort all results by timestamp
@@ -174,7 +174,7 @@ Register as `sift_memory_challenge` in tool list.
 
 ### Phase 4: Integration Points
 - Optional: auto-run on new pattern/preference creation
-- Optional: add to `sift_memory_stats` output
+- Optional: add to `memory_stats` output
 
 ---
 
@@ -231,12 +231,12 @@ static sqlite3 *load_db_to_memory(const char *db_path) {
 
 ## Success Criteria
 
-1. `sift_memory_challenge("duplicates represent connection strength")` returns:
+1. `memory_challenge("duplicates represent connection strength")` returns:
    - Support: Edward's question (msg 13065)
    - Counterevidence: My "issue" framing (msg 12940)
    - Evolution: timeline showing bug→question→belief
 
-2. `sift_memory_challenge("weights barely mattered")` returns:
+2. `memory_challenge("weights barely mattered")` returns:
    - Support: Taguchi results
    - Counterevidence: (none found)
    - No evolution warning

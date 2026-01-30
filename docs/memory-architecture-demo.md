@@ -18,9 +18,9 @@ The history document demonstrates Sift's memory capabilities by drawing on multi
 
 | Tool | Document Section | What It Provided |
 |------|------------------|------------------|
-| `sift_memory_traverse` | Phases 1-9 narrative | Walked backwards through 85 hops, reconstructing the sequence of work |
-| `sift_memory_origin` | "The Beginning" | Found where the collaboration started |
-| `sift_memory_context` | Overall structure | Journey overview, milestones, themes |
+| `memory_traverse` | Phases 1-9 narrative | Walked backwards through 85 hops, reconstructing the sequence of work |
+| `memory_origin` | "The Beginning" | Found where the collaboration started |
+| `memory_context` | Overall structure | Journey overview, milestones, themes |
 
 The entire chronological narrative (Phases 1-9) came from traversing the memory chain. Each phase was a cluster of connected memories that could be walked through sequentially.
 
@@ -28,8 +28,8 @@ The entire chronological narrative (Phases 1-9) came from traversing the memory 
 
 | Tool | Document Section | What It Provided |
 |------|------------------|------------------|
-| `sift_memory_network(hubs)` | "most connected memory" | Found Taguchi with 16 connections as a hub |
-| `sift_memory_stats.network_summary` | "276 connections" | Graph topology metrics |
+| `memory_network(hubs)` | "most connected memory" | Found Taguchi with 16 connections as a hub |
+| `memory_stats.network_summary` | "276 connections" | Graph topology metrics |
 
 The insight about Taguchi being central came from `hubs` mode—it wasn't just chronologically important, it was *topologically* important.
 
@@ -37,29 +37,29 @@ The insight about Taguchi being central came from `hubs` mode—it wasn't just c
 
 | Tool | Document Section | What It Provided |
 |------|------------------|------------------|
-| `sift_memory_search` | Topic-specific content | Found memories about "Taguchi", "synonym", "friction" |
-| `sift_memory_list(type=pattern)` | "Patterns I've Learned" | All 14 patterns retrieved |
-| `sift_memory_list(type=gotcha)` | "Corrections I've Received" | All logged corrections |
+| `memory_search` | Topic-specific content | Found memories about "Taguchi", "synonym", "friction" |
+| `memory_list(type=pattern)` | "Patterns I've Learned" | All 14 patterns retrieved |
+| `memory_list(type=gotcha)` | "Corrections I've Received" | All logged corrections |
 
 ### 4. Decision Subsystem (Rationale Tracking)
 
 | Tool | Document Section | What It Provided |
 |------|------------------|------------------|
-| `sift_memory_decisions` | Specific decision quotes | Exact decision records with rationales |
-| `sift_memory_decide` (historical) | "4 recorded decisions" | Why we chose 4-phase implementation, bidirectional synonyms, etc. |
+| `memory_decisions` | Specific decision quotes | Exact decision records with rationales |
+| `memory_decide` (historical) | "4 recorded decisions" | Why we chose 4-phase implementation, bidirectional synonyms, etc. |
 
 ### 5. Reflection Subsystem (Meta-cognition)
 
 | Tool | Document Section | What It Provided |
 |------|------------------|------------------|
-| `sift_memory_reflections` | Throughout | Past reasoning about why approaches were chosen |
-| `sift_memory_trajectory_reflections` | "4 trajectory reflections" | Arc summaries of completed work phases |
+| `memory_reflections` | Throughout | Past reasoning about why approaches were chosen |
+| `memory_trajectory_reflections` | "4 trajectory reflections" | Arc summaries of completed work phases |
 
 ### 6. Stats Subsystem (Quantitative Overview)
 
 | Tool | Document Section | What It Provided |
 |------|------------------|------------------|
-| `sift_memory_stats` | "The Numbers" table | 111 memories, 276 connections, counts by type |
+| `memory_stats` | "The Numbers" table | 111 memories, 276 connections, counts by type |
 
 ---
 
@@ -67,7 +67,7 @@ The insight about Taguchi being central came from `hubs` mode—it wasn't just c
 
 ```
                     ┌─────────────────────┐
-                    │  sift_memory_stats  │
+ │ memory_stats │
                     │  (session start)    │
                     └──────────┬──────────┘
                                │

@@ -26,7 +26,7 @@ I created three gotchas about sift tool usage:
 Then I synthesized them:
 
 ```
-sift_memory_synthesize(
+memory_synthesize(
   sources: ["mem-fbd3c0a3ae6f", "mem-e3d373dec4a9", "mem-b6e696ab46f1"],
   title: "Sift tool usage patterns",
   summary: "Key lessons from tool usage gotchas:\n\n1. **Search**: FTS5 strips..."
