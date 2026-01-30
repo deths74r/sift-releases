@@ -1,4 +1,4 @@
-<!-- sift-template-0.15.0-alpha -->
+<!-- sift-template-0.16.0-alpha -->
 # SQL Tools
 
 Process and transform text using SQL queries.
@@ -11,16 +11,16 @@ Process and transform text using SQL queries.
 
 | Use Case | Tool |
 |----------|------|
-| Transform text data | `sift_sql` |
-| Transform file in-place | `sift_transform` |
-| Parse CSV/TSV | `sift_sql` with `csv_field()` |
-| Regex replacements | `sift_sql` with `regex_replace()` |
+| Transform text data | `sql` |
+| Transform file in-place | `transform` |
+| Parse CSV/TSV | `sql` with `csv_field()` |
+| Regex replacements | `sql` with `regex_replace()` |
 
 ---
 
 ## 2. TOOL REFERENCE
 
-### sift_sql
+### sql
 
 Execute SQL on text input.
 
@@ -36,7 +36,7 @@ Execute SQL on text input.
 lines(line_number INTEGER, content TEXT)
 ```
 
-### sift_transform
+### transform
 
 SQL-based in-place file transformation.
 
@@ -152,7 +152,7 @@ Standard SQLite functions also available:
 
 ## 5. TIPS
 
-**Order matters:** Use `ORDER BY line_number` in `sift_transform` to preserve line order.
+**Order matters:** Use `ORDER BY line_number` in `transform` to preserve line order.
 
 **Output formats:**
 - `plain` - One result per line
@@ -160,6 +160,6 @@ Standard SQLite functions also available:
 - `csv` - CSV with header row
 - `tsv` - Tab-separated
 
-**Dry run first:** Always use `dry_run: true` with `sift_transform` before applying changes.
+**Dry run first:** Always use `dry_run: true` with `transform` before applying changes.
 
-**Combine with sift_edit:** For complex file edits, `sift_edit` with SQL mode offers more control.
+**Combine with edit:** For complex file edits, `edit` with SQL mode offers more control.

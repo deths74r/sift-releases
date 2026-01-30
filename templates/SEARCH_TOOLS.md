@@ -1,4 +1,4 @@
-<!-- sift-template-0.15.0-alpha -->
+<!-- sift-template-0.16.0-alpha -->
 # Search Tools
 
 Fast full-text search across your codebase using FTS5.
@@ -7,24 +7,24 @@ Fast full-text search across your codebase using FTS5.
 
 ## 1. WHEN TO USE
 
-**sift_search REPLACES native Grep and Glob tools:**
+**search REPLACES native Grep and Glob tools:**
 
-| Feature | sift_search | Grep/Glob |
+| Feature | search | Grep/Glob |
 |---------|-------------|-----------|
 | Speed | 30-195x faster | Baseline |
 | Boolean queries | AND, OR, NOT, NEAR | Limited |
 | Auto-indexing | Yes | No |
 | Persistent index | Yes (.sift/workspace.db) | No |
 
-**Always use sift_search for codebase searches.**
+**Always use search for codebase searches.**
 
-The workspace index auto-initializes on first use. Use `sift_workspace` only for manual maintenance.
+The workspace index auto-initializes on first use. Use `workspace` only for manual maintenance.
 
 ---
 
 ## 2. TOOL REFERENCE
 
-### sift_search
+### search
 
 Full-text search with FTS5 boolean queries.
 
@@ -53,7 +53,7 @@ Full-text search with FTS5 boolean queries.
 
 **Note:** FTS5 strips special characters like `--flag`. Use `literal: true` for exact substring matching.
 
-### sift_workspace
+### workspace
 
 Manage the workspace index (usually not needed).
 
@@ -63,7 +63,7 @@ Manage the workspace index (usually not needed).
 | `directory` | string | Directory to index (default: cwd) |
 
 **Actions:**
-- `init` - Create index (auto-done by sift_search)
+- `init` - Create index (auto-done by search)
 - `status` - Show index info (file count, last update)
 - `refresh` - Update changed files incrementally
 - `rebuild` - Full reindex (use if index is corrupted)
@@ -122,7 +122,7 @@ Search tools automatically stream large results to prevent context overflow.
 
 | Tool | Threshold | Behavior |
 |------|-----------|----------|
-| `sift_search` | >50 results | Streams search results incrementally |
+| `search` | >50 results | Streams search results incrementally |
 
 **When streaming triggers:**
 - Result count exceeds threshold
@@ -136,8 +136,8 @@ Search tools automatically stream large results to prevent context overflow.
 
 **When streaming is active:**
 - Response includes `stream_id` and `output_file` path
-- Use `sift_stream_read(stream_id)` to retrieve chunks
-- Use `sift_stream_close(stream_id)` when done
+- Use `stream_read(stream_id)` to retrieve chunks
+- Use `stream_close(stream_id)` when done
 
 ---
 

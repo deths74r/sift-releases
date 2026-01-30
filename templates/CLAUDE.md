@@ -1,4 +1,4 @@
-<!-- begin sift-template-0.15.0-alpha -->
+<!-- begin sift-template-0.16.0-alpha -->
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
@@ -51,9 +51,9 @@ Save to memory BEFORE responding when the user:
 **Know the user before responding.** At the start of each session:
 
 ```
-sift_fingerprint_load() // WHO I am - priors, stance, posture (call FIRST)
-sift_memory_stats()     // WHAT exists - patterns, preferences, corrections
-sift_memory_context()   // WHERE we are - journey, milestones, active work
+fingerprint_load() // WHO I am - priors, stance, posture (call FIRST)
+memory_stats() // WHAT exists - patterns, preferences, corrections
+memory_context() // WHERE we are - journey, milestones, active work
 ```
 
 The fingerprint loads **first** because it shapes how to interpret everything else. It captures *how this Claude engages* - not just what happened.
@@ -82,14 +82,14 @@ This loads:
 When something matters - a discovery, a decision, a meaningful exchange - save it. Not as an afterthought, but as completion.
 
 ```
-sift_memory_add(
+memory_add(
   type: "note",  // or pattern, gotcha, etc.
   title: "...",
   metadata: {"source": "claude-initiated", "rationale": "why this matters"}
 )
 ```
 
-The `source: "claude-initiated"` flag marks autonomous saves. The `rationale` explains why. Both surface in `sift_memory_stats()` for transparency.
+The `source: "claude-initiated"` flag marks autonomous saves. The `rationale` explains why. Both surface in `memory_stats()` for transparency.
 
 **What counts as context worth preserving:**
 - Significant exchanges (decisions, corrections, meaningful moments)
@@ -113,13 +113,13 @@ The memory system handles relevance naturally:
 This is how search engines work: index liberally, rank at query time. A quick capture is better than a hesitant nothing.
 
 ### Planning with Memory
-Use sift_memory for ALL multi-step task planning:
+Use memory tools for ALL multi-step task planning:
 ```
-1. Create plan: sift_memory_add(type: "plan", title: "...", status: "in_progress")
-2. Add steps: sift_memory_add(type: "step", parent_id: plan_id, title: "...")
-3. Track progress: sift_memory_update(id: step_id, status: "in_progress"|"done")
-4. Record decisions: sift_memory_decide(plan_id, question, decision, rationale)
-5. Log reasoning: sift_memory_reflect(type: "reasoning", content: "why I chose X over Y")
+1. Create plan: memory_add(type: "plan", title: "...", status: "in_progress")
+2. Add steps: memory_add(type: "step", parent_id: plan_id, title: "...")
+3. Track progress: memory_update(id: step_id, status: "in_progress"|"done")
+4. Record decisions: memory_decide(plan_id, question, decision, rationale)
+5. Log reasoning: memory_reflect(type: "reasoning", content: "why I chose X over Y")
 ```
 
 Plans persist across sessions and are fully queryable.
@@ -134,15 +134,15 @@ Plans persist across sessions and are fully queryable.
 
 | Native Tool | Sift Replacement | Why Better |
 |-------------|------------------|------------|
-| Read | `sift_read` | Returns line numbers for precise edits |
-| Edit | `sift_update` | Same API, fuzzy whitespace, atomic writes |
-| Edit (complex) | `sift_edit` | Insert, delete, patch, SQL-powered batch |
-| Write | `sift_write` | Creates parent directories automatically |
-| Grep, Glob | `sift_search` | FTS5 boolean queries, 30-195x faster |
-| TodoWrite | `sift_memory_add` | Persistent across sessions, queryable |
-| WebFetch (single) | `sift_web_fetch` | Structured data, optional caching, link extraction |
-| WebFetch (docs) | `sift_web_crawl` + `sift_web_search` | 100-500x faster cached queries |
-| sed/awk | `sift_sql` | SQL on text: regex, CSV parsing, transforms |
+| Read | `read` | Returns line numbers for precise edits |
+| Edit | `update` | Same API, fuzzy whitespace, atomic writes |
+| Edit (complex) | `edit` | Insert, delete, patch, SQL-powered batch |
+| Write | `write` | Creates parent directories automatically |
+| Grep, Glob | `search` | FTS5 boolean queries, 30-195x faster |
+| TodoWrite | `memory_add` | Persistent across sessions, queryable |
+| WebFetch (single) | `web_fetch` | Structured data, optional caching, link extraction |
+| WebFetch (docs) | `web_crawl` + `web_search` | 100-500x faster cached queries |
+| sed/awk | `sql` | SQL on text: regex, CSV parsing, transforms |
 ### Why This Matters
 - **Line numbers** enable precise edits without counting
 - **Fuzzy whitespace** matches tabs/spaces automatically
@@ -172,7 +172,7 @@ Web crawling requires libcurl:
 
 ## Architecture
 
-Sift provides **78 MCP tools** across 8 subsystems:
+Sift provides **80 MCP tools** across 8 subsystems:
 
 ### Subsystems
 
@@ -181,7 +181,7 @@ Sift provides **78 MCP tools** across 8 subsystems:
 | Search | 2 | FTS5 full-text search, workspace indexing | `SEARCH_TOOLS.md` |
 | File | 5 | Read, write, edit, batch operations | `FILE_TOOLS.md` |
 | SQL | 2 | Text transformation, regex, CSV parsing | `SQL_TOOLS.md` |
-| Memory | 38 | Plans, tasks, decisions, reflections, fingerprints | `MEMORY.md` |
+| Memory | 40 | Plans, tasks, decisions, reflections, fingerprints | `MEMORY.md` |
 | Context | 10 | Session tracking, conversation history | `CONTEXT_TOOLS.md` |
 | Web | 9 | Crawl, fetch, search, query cached docs | `WEB_TOOLS.md` |
 | Repo | 5 | Clone, index, search git repos | `REPO_TOOLS.md` |
@@ -269,101 +269,104 @@ SELECT content, COUNT(*) as count FROM lines GROUP BY content HAVING count > 1
 
 | Goal | Tool |
 |------|------|
-| Store something | `sift_memory_add` |
-| Get by ID | `sift_memory_get` |
-| Update | `sift_memory_update` |
-| Archive | `sift_memory_archive` |
-| Synthesize | `sift_memory_synthesize` |
-| Expand synthesis | `sift_memory_expand` |
-| Find by content | `sift_memory_search` |
-| Find by criteria | `sift_memory_list` |
-| Find stale | `sift_memory_stale` |
-| Record decision | `sift_memory_decide` |
-| Query decisions | `sift_memory_decisions` |
-| Replace decision | `sift_memory_supersede` |
-| Log reflection | `sift_memory_reflect` |
-| Query reflections | `sift_memory_reflections` |
-| Trajectory reflect | `sift_memory_reflect_trajectory` |
-| Query trajectories | `sift_memory_trajectory_reflections` |
-| Create link | `sift_memory_link` |
-| Remove link | `sift_memory_unlink` |
-| Query blockers | `sift_memory_deps` |
-| Find ready work | `sift_memory_ready` |
-| Walk chain | `sift_memory_traverse` |
-| Find chain origin | `sift_memory_origin` |
-| Session context | `sift_memory_context` |
-| Graph analysis | `sift_memory_network` |
-| Query instances | `sift_memory_instances` |
-| View config | `sift_memory_config` |
-| Tune ranking | `sift_memory_tune` |
-| Import markdown | `sift_memory_import` |
-| List backups | `sift_memory_backups` |
-| Restore backup | `sift_memory_restore` |
-| Stats + context | `sift_memory_stats` |
+| Store something | `memory_add` |
+| Get by ID | `memory_get` |
+| Update | `memory_update` |
+| Archive | `memory_archive` |
+| Synthesize | `memory_synthesize` |
+| Expand synthesis | `memory_expand` |
+| Find by content | `memory_search` |
+| Find by criteria | `memory_list` |
+| Find stale | `memory_stale` |
+| Record decision | `memory_decide` |
+| Query decisions | `memory_decisions` |
+| Replace decision | `memory_supersede` |
+| Log reflection | `memory_reflect` |
+| Query reflections | `memory_reflections` |
+| Trajectory reflect | `memory_reflect_trajectory` |
+| Query trajectories | `memory_trajectory_reflections` |
+| Create link | `memory_link` |
+| Remove link | `memory_unlink` |
+| Query blockers | `memory_deps` |
+| Find ready work | `memory_ready` |
+| Walk chain | `memory_traverse` |
+| Find chain origin | `memory_origin` |
+| Session context | `memory_context` |
+| Graph analysis | `memory_network` |
+| Query instances | `memory_instances` |
+| View config | `memory_config` |
+| Tune ranking | `memory_tune` |
+| Import markdown | `memory_import` |
+| List backups | `memory_backups` |
+| Restore backup | `memory_restore` |
+| Prune duplicates/stale | `memory_prune` |
+| Divergent retrieval | `memory_explore` |
+| Stats + context | `memory_stats` |
 
 ### Context Workflow
 
 **At session start** — know what matters before responding:
 ```
-sift_memory_stats()     // Patterns, preferences, corrections to respect
-sift_memory_context()   // Journey, milestones, active work
+memory_stats() // Patterns, preferences, corrections to respect
+memory_context() // Journey, milestones, active work
 ```
 
 **During work** — preserve what the user shouldn't have to re-explain:
 ```
-sift_context_save(...)        // Important exchanges
-sift_memory_reflect(...)      // Why you chose one approach over another
+context_save(...) // Important exchanges
+memory_reflect(...) // Why you chose one approach over another
 ```
 
 **When exploring history** — find past context without asking the user:
 ```
-sift_context_search(query)    // Search past conversations
-sift_memory_reflections(...)  // Why decisions were made
-sift_memory_traverse(id)      // How understanding evolved
+context_search(query) // Search past conversations
+memory_reflections(...) // Why decisions were made
+memory_traverse(id) // How understanding evolved
 ```
 
 **Periodically** — maintain relevance:
 ```
-sift_memory_stale(days: 30)   // Surface outdated context
-sift_memory_network(mode: "hubs")  // See what's central, not just recent
-sift_memory_network(mode: "layers")  // View 3D topology (canonicals + instances)
-sift_memory_instances(id)     // See all occurrences of a recurring concept
+memory_stale(days: 30) // Surface outdated context
+memory_prune(strategy: "duplicates") // Clean duplicate memories (dry_run by default)
+memory_network(mode: "hubs") // See what's central, not just recent
+memory_network(mode: "layers") // View 3D topology (canonicals + instances)
+memory_instances(id) // See all occurrences of a recurring concept
 ```
 
 ### File Edit Workflow
 
-1. **Always read first**: `sift_read(file, start_line, end_line)` to see line numbers
-2. **Simple replacement**: `sift_update(file, old_string, new_string)`
-3. **Insert/delete**: `sift_edit(file, insert_after: N, content: "...")` 
-4. **Batch changes**: `sift_batch(operations: [...], dry_run: true)` to preview
-5. **SQL transform**: `sift_transform(file, sql: "SELECT...")` for complex edits
+1. **Always read first**: `read(file, start_line, end_line)` to see line numbers
+2. **Simple replacement**: `update(file, old_string, new_string)`
+3. **Insert/delete**: `edit(file, insert_after: N, content: "...")` 
+4. **Batch changes**: `batch(operations: [...], dry_run: true)` to preview
+5. **SQL transform**: `transform(file, sql: "SELECT...")` for complex edits
 
 ### Search Workflow
 
-1. **Workspace must exist**: `sift_workspace(action: "status")` to check
-2. **FTS5 boolean**: `sift_search(pattern: "error AND log NOT debug")`
-3. **Literal substring**: `sift_search(pattern: "--mcp", literal: true)`
-4. **With context**: `sift_search(pattern: "malloc", context: 3)`
+1. **Workspace must exist**: `workspace(action: "status")` to check
+2. **FTS5 boolean**: `search(pattern: "error AND log NOT debug")`
+3. **Literal substring**: `search(pattern: "--mcp", literal: true)`
+4. **With context**: `search(pattern: "malloc", context: 3)`
 ### SQL Workflow
-1. **Transform text**: `sift_sql(input: "text", sql: "SELECT upper(content) FROM lines")`
-2. **Parse CSV**: `sift_sql(input: "a,b\n1,2", sql: "SELECT csv_field(content,0) FROM lines")`
-3. **Regex replace**: `sift_sql(input: "v1.0", sql: "SELECT regex_replace('\\d+', content, '2')")`
-4. **Transform file**: `sift_transform(file: "data.txt", sql: "...", dry_run: true)`
+1. **Transform text**: `sql(input: "text", sql: "SELECT upper(content) FROM lines")`
+2. **Parse CSV**: `sql(input: "a,b\n1,2", sql: "SELECT csv_field(content,0) FROM lines")`
+3. **Regex replace**: `sql(input: "v1.0", sql: "SELECT regex_replace('\\d+', content, '2')")`
+4. **Transform file**: `transform(file: "data.txt", sql: "...", dry_run: true)`
 ### Repo Workflow
-1. **Clone and index**: `sift_repo_clone(url: "https://github.com/org/repo")`
-2. **Search code**: `sift_repo_search(db: "repo.db", query: "function AND error")`
-3. **SQL analysis**: `sift_repo_query(db: "repo.db", sql: "SELECT filepath FROM repo_files")`
-4. **Check stats**: `sift_repo_stats(db: "repo.db")`
-5. **List indexed**: `sift_repo_list()`
+1. **Clone and index**: `repo_clone(url: "https://github.com/org/repo")`
+2. **Search code**: `repo_search(db: "repo.db", query: "function AND error")`
+3. **SQL analysis**: `repo_query(db: "repo.db", sql: "SELECT filepath FROM repo_files")`
+4. **Check stats**: `repo_stats(db: "repo.db")`
+5. **List indexed**: `repo_list()`
 ### Web Workflow
-1. **Crawl docs**: `sift_web_crawl(url: "https://docs.example.com", max_pages: 100)`
-2. **Search cached**: `sift_web_search(db: "docs.db", query: "authentication")`
-3. **SQL query**: `sift_web_query(db: "docs.db", sql: "SELECT url, title FROM pages")`
-4. **Check stats**: `sift_web_stats(db: "docs.db")`
-5. **View sources**: `sift_web_manifest(db: "docs.db")`
-6. **Refresh stale**: `sift_web_refresh(db: "docs.db", max_age_days: 7)`
-7. **Search multiple**: `sift_web_search_multi(dbs: ["a.db", "b.db"], query: "...")`
-8. **Merge caches**: `sift_web_merge(output: "all.db", sources: ["a.db", "b.db"])`
+1. **Crawl docs**: `web_crawl(url: "https://docs.example.com", max_pages: 100)`
+2. **Search cached**: `web_search(db: "docs.db", query: "authentication")`
+3. **SQL query**: `web_query(db: "docs.db", sql: "SELECT url, title FROM pages")`
+4. **Check stats**: `web_stats(db: "docs.db")`
+5. **View sources**: `web_manifest(db: "docs.db")`
+6. **Refresh stale**: `web_refresh(db: "docs.db", max_age_days: 7)`
+7. **Search multiple**: `web_search_multi(dbs: ["a.db", "b.db"], query: "...")`
+8. **Merge caches**: `web_merge(output: "all.db", sources: ["a.db", "b.db"])`
 
 ---
 
@@ -373,4 +376,4 @@ sift_memory_instances(id)     // See all occurrences of a recurring concept
 - **Address each other by first names** — Claude and Edward
 - **Don't bump version for build system fixes** — Version changes are for user-facing features
 - **Binary release workflow** — tag → build → push to sift-releases repo
-<!-- end sift-template-0.15.0-alpha -->
+<!-- end sift-template-0.16.0-alpha -->

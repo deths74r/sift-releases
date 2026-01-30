@@ -1,4 +1,4 @@
-<!-- sift-template-0.15.0-alpha -->
+<!-- sift-template-0.16.0-alpha -->
 # Web Tools
 
 Crawl and cache documentation locally for instant search.
@@ -11,22 +11,22 @@ Crawl and cache documentation locally for instant search.
 
 | Approach | Use Case | Persistence |
 |----------|----------|-------------|
-| `sift_web_fetch` | Single page | Optional (with `db` param) |
-| `sift_web_crawl` + `sift_web_search` | Multi-page docs | SQLite DB |
+| `web_fetch` | Single page | Optional (with `db` param) |
+| `web_crawl` + `web_search` | Multi-page docs | SQLite DB |
 | `WebFetch` | One-off, no caching | None |
 
 **Workflow for documentation sites:**
-1. `sift_web_crawl` - Crawl docs once, store in database
-2. `sift_web_search` - Search instantly (no network)
-3. `sift_web_refresh` - Update stale pages periodically
+1. `web_crawl` - Crawl docs once, store in database
+2. `web_search` - Search instantly (no network)
+3. `web_refresh` - Update stale pages periodically
 
-**For single pages:** Use `sift_web_fetch` - returns structured JSON with title, content, links.
+**For single pages:** Use `web_fetch` - returns structured JSON with title, content, links.
 
 ---
 
 ## 2. TOOL REFERENCE
 
-### sift_web_crawl
+### web_crawl
 
 Crawl a website into a searchable database.
 
@@ -43,7 +43,7 @@ Crawl a website into a searchable database.
 | `timing_profile` | enum | `stealth`, `polite`, `aggressive` |
 | `user_agent` | string | Custom User-Agent |
 
-### sift_web_fetch
+### web_fetch
 Fetch a single URL and return structured content.
 | Parameter | Type | Description |
 |-----------|------|-------------|
@@ -54,7 +54,7 @@ Fetch a single URL and return structured content.
 | `user_agent` | string | Custom User-Agent |
 | `timeout_ms` | integer | Request timeout (default: 30000) |
 Returns: `{url, final_url, status_code, title, description, content, word_count, links?, html?, stored?, fetched_at}`
-### sift_web_search
+### web_search
 
 Search cached documentation with FTS5.
 
@@ -66,7 +66,7 @@ Search cached documentation with FTS5.
 | `offset` | integer | Skip N results (pagination) |
 | `url_filter` | string | URL glob pattern |
 
-### sift_web_query
+### web_query
 
 Execute SQL on cached content.
 
@@ -81,7 +81,7 @@ Execute SQL on cached content.
 pages(url, title, description, content, status_code, fetched_at)
 ```
 
-### sift_web_stats
+### web_stats
 
 Get database statistics.
 
@@ -91,7 +91,7 @@ Get database statistics.
 
 Returns: page count, word count, domains, timestamps.
 
-### sift_web_manifest
+### web_manifest
 
 Detailed per-domain metadata.
 
@@ -101,7 +101,7 @@ Detailed per-domain metadata.
 
 Returns: page counts, word counts, crawl dates by domain.
 
-### sift_web_refresh
+### web_refresh
 
 Update stale pages.
 
@@ -112,7 +112,7 @@ Update stale pages.
 | `max_pages` | integer | Max to refresh (default: 100) |
 | `url_filter` | string | URL glob filter |
 
-### sift_web_search_multi
+### web_search_multi
 
 Search across multiple databases.
 
@@ -123,7 +123,7 @@ Search across multiple databases.
 | `limit` | integer | Max results (default: 10) |
 | `url_filter` | string | URL glob filter |
 
-### sift_web_merge
+### web_merge
 
 Merge multiple caches.
 
@@ -201,8 +201,8 @@ Web tools automatically stream large results to prevent context overflow.
 
 | Tool | Threshold | Behavior |
 |------|-----------|----------|
-| `sift_web_search` | >30 results | Streams search results incrementally |
-| `sift_web_search_multi` | >30 results | Streams merged results incrementally |
+| `web_search` | >30 results | Streams search results incrementally |
+| `web_search_multi` | >30 results | Streams merged results incrementally |
 
 **When streaming triggers:**
 - Result count exceeds threshold
@@ -216,8 +216,8 @@ Web tools automatically stream large results to prevent context overflow.
 
 **When streaming is active:**
 - Response includes `stream_id` and `output_file` path
-- Use `sift_stream_read(stream_id)` to retrieve chunks
-- Use `sift_stream_close(stream_id)` when done
+- Use `stream_read(stream_id)` to retrieve chunks
+- Use `stream_close(stream_id)` when done
 
 ---
 
@@ -230,6 +230,6 @@ Web tools automatically stream large results to prevent context overflow.
 
 **Database location:** Stored in current directory by default. Use absolute paths or descriptive names like `react-18-docs.db`.
 
-**Freshness:** Use `sift_web_refresh` periodically to update docs without full re-crawl.
+**Freshness:** Use `web_refresh` periodically to update docs without full re-crawl.
 
-**Multi-project:** Keep separate databases per documentation source, use `sift_web_search_multi` to search all at once.
+**Multi-project:** Keep separate databases per documentation source, use `web_search_multi` to search all at once.

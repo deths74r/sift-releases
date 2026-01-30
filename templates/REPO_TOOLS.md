@@ -1,4 +1,4 @@
-<!-- sift-template-0.15.0-alpha -->
+<!-- sift-template-0.16.0-alpha -->
 # Repo Tools
 
 Clone and index external git repositories for searchable reference.
@@ -14,16 +14,16 @@ Clone external repositories to:
 - Understand dependencies
 
 **Workflow:**
-1. `sift_repo_clone` - Clone and index a repo
-2. `sift_repo_search` - Search the indexed code
-3. `sift_repo_query` - SQL queries for analysis
-4. `sift_repo_stats` - Check what's indexed
+1. `repo_clone` - Clone and index a repo
+2. `repo_search` - Search the indexed code
+3. `repo_query` - SQL queries for analysis
+4. `repo_stats` - Check what's indexed
 
 ---
 
 ## 2. TOOL REFERENCE
 
-### sift_repo_clone
+### repo_clone
 
 Clone and index a git repository.
 
@@ -38,7 +38,7 @@ Clone and index a git repository.
 
 Creates a searchable SQLite database with FTS5.
 
-### sift_repo_search
+### repo_search
 
 Search indexed repository content.
 
@@ -50,7 +50,7 @@ Search indexed repository content.
 | `files` | string | File pattern filter (e.g., `"*.c"`) |
 | `language` | string | Language filter (e.g., `"c"`, `"python"`) |
 
-### sift_repo_query
+### repo_query
 
 Execute SQL on repository database.
 
@@ -65,7 +65,7 @@ Execute SQL on repository database.
 repo_files(filepath, content, language, line_count, byte_size)
 ```
 
-### sift_repo_stats
+### repo_stats
 
 Get repository statistics.
 
@@ -75,7 +75,7 @@ Get repository statistics.
 
 Returns: file count, line count, language breakdown, clone metadata.
 
-### sift_repo_list
+### repo_list
 
 List indexed repositories in current directory.
 
@@ -132,8 +132,8 @@ Repo tools automatically stream large results to prevent context overflow.
 
 | Tool | Threshold | Behavior |
 |------|-----------|----------|
-| `sift_repo_search` | >50 results | Streams search results incrementally |
-| `sift_repo_query` | >50 rows | Streams query results incrementally |
+| `repo_search` | >50 results | Streams search results incrementally |
+| `repo_query` | >50 rows | Streams query results incrementally |
 
 **When streaming triggers:**
 - Result count exceeds threshold
@@ -147,8 +147,8 @@ Repo tools automatically stream large results to prevent context overflow.
 
 **When streaming is active:**
 - Response includes `stream_id` and `output_file` path
-- Use `sift_stream_read(stream_id)` to retrieve chunks
-- Use `sift_stream_close(stream_id)` when done
+- Use `stream_read(stream_id)` to retrieve chunks
+- Use `stream_close(stream_id)` when done
 
 ---
 
@@ -158,7 +158,7 @@ Repo tools automatically stream large results to prevent context overflow.
 
 **File filters:** Use `include` to index only relevant files (e.g., source code). This speeds up cloning and reduces database size.
 
-**Multiple repos:** Each repo gets its own `.db` file. Use `sift_repo_list` to see what's indexed.
+**Multiple repos:** Each repo gets its own `.db` file. Use `repo_list` to see what's indexed.
 
 **Use cases:**
 - "How does SQLite handle X?" → Clone and search sqlite-src.db

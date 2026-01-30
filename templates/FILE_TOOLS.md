@@ -1,4 +1,4 @@
-<!-- sift-template-0.15.0-alpha -->
+<!-- sift-template-0.16.0-alpha -->
 # File Tools
 
 Read, write, and edit files with line-number precision.
@@ -11,11 +11,11 @@ Read, write, and edit files with line-number precision.
 
 | Sift Tool | Replaces | Why Better |
 |-----------|----------|------------|
-| `sift_read` | `Read` | Returns line numbers for precise editing |
-| `sift_write` | `Write` | Creates parent directories automatically |
-| `sift_update` | `Edit` | Clearer error messages, same API |
-| `sift_edit` | `Edit` | Multiple modes: find/replace, insert, SQL, patch |
-| `sift_batch` | Multiple `Edit` | Atomic operations across files |
+| `read` | `Read` | Returns line numbers for precise editing |
+| `write` | `Write` | Creates parent directories automatically |
+| `update` | `Edit` | Clearer error messages, same API |
+| `edit` | `Edit` | Multiple modes: find/replace, insert, SQL, patch |
+| `batch` | Multiple `Edit` | Atomic operations across files |
 
 **Always prefer sift tools over native tools when available.**
 
@@ -23,7 +23,7 @@ Read, write, and edit files with line-number precision.
 
 ## 2. TOOL REFERENCE
 
-### sift_read
+### read
 
 Read files with line numbers for accurate editing.
 
@@ -42,7 +42,7 @@ Read files with line numbers for accurate editing.
     3: third line
 ```
 
-### sift_write
+### write
 
 Create or overwrite files.
 
@@ -53,7 +53,7 @@ Create or overwrite files.
 
 Creates parent directories automatically.
 
-### sift_update
+### update
 
 Simple find/replace (same API as native Edit).
 
@@ -68,7 +68,7 @@ Fails with helpful error if:
 - `old_string` not found
 - `old_string` found multiple times (use `replace_all: true`)
 
-### sift_edit
+### edit
 
 Advanced editing with multiple modes.
 
@@ -114,7 +114,7 @@ Advanced editing with multiple modes.
 | `diff` | boolean | Return unified diff |
 | `preview` | boolean | Show match count and samples |
 
-### sift_batch
+### batch
 
 Atomic multi-operation edits.
 
@@ -183,7 +183,7 @@ File tools automatically stream large results to prevent context overflow.
 
 | Tool | Threshold | Behavior |
 |------|-----------|----------|
-| `sift_read` | >500 lines or >50KB | Streams file content incrementally |
+| `read` | >500 lines or >50KB | Streams file content incrementally |
 
 **When streaming triggers:**
 - File size exceeds threshold
@@ -197,8 +197,8 @@ File tools automatically stream large results to prevent context overflow.
 
 **When streaming is active:**
 - Response includes `stream_id` and `output_file` path
-- Use `sift_stream_read(stream_id)` to retrieve chunks
-- Use `sift_stream_close(stream_id)` when done
+- Use `stream_read(stream_id)` to retrieve chunks
+- Use `stream_close(stream_id)` when done
 
 ---
 
@@ -210,7 +210,7 @@ File tools automatically stream large results to prevent context overflow.
 - Use `strict_whitespace: true` for exact matching
 
 **Debug matching failures**:
-- Use `sift_read` with `show_whitespace: true` to see actual whitespace
+- Use `read` with `show_whitespace: true` to see actual whitespace
 - Use `preview: true` to check matches before applying
 
 **Large replacements**:

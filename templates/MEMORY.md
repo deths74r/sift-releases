@@ -1,4 +1,4 @@
-<!-- sift-template-0.15.0-alpha -->
+<!-- sift-template-0.16.0-alpha -->
 # Memory System
 
 Persistent, queryable storage that maintains collaboration continuity across sessions. 
@@ -13,7 +13,7 @@ These are things you MUST do automatically, without being asked.
 
 ### Immediate Save Triggers
 
-IMMEDIATELY use `sift_memory_add` when the user shares:
+IMMEDIATELY use `memory_add` when the user shares:
 
 | User shares... | Save as | Example |
 |----------------|---------|--------|
@@ -36,7 +36,7 @@ When the user corrects you or says 'no', 'wrong', 'stop', 'don't do that':
 3. Then continue with corrected behavior
 
 ```
-sift_memory_reflect(
+memory_reflect(
   reflection_type: "correction",
   content: "User said X was wrong because Y"
 )
@@ -59,11 +59,11 @@ This creates a queryable reasoning trail for future reference.
 When a sift tool behaves unexpectedly, log it:
 
 ```
-sift_memory_add(
+memory_add(
   type: "gotcha",
-  title: "[sift_search] FTS5 strips special characters",
+ title: "[search] FTS5 strips special characters",
   description: "Searching for '--mcp' tokenizes as 'mcp'. Use literal:true.",
-  metadata: {"friction": true, "tool": "sift_search", "category": "unexpected_result"}
+ metadata: {"friction": true, "tool": "search", "category": "unexpected_result"}
 )
 ```
 
@@ -84,9 +84,9 @@ Categories: `unexpected_result`, `missing_feature`, `confusing_behavior`, `perfo
 ### Session Start
 
 ```
-1. sift_fingerprint_load → WHO I am (priors, stance, posture) - CALL FIRST
-2. sift_memory_stats    → WHAT exists (patterns, preferences, corrections)
-3. sift_memory_context  → WHERE we are (journey, milestones, active work)
+1. fingerprint_load → WHO I am (priors, stance, posture) - CALL FIRST
+2. memory_stats → WHAT exists (patterns, preferences, corrections)
+3. memory_context → WHERE we are (journey, milestones, active work)
 ```
 
 **The fingerprint loads first** because it shapes how to interpret everything else. It captures *how this Claude engages* - not just what happened.
@@ -98,11 +98,11 @@ The SessionStart hook calls `sift --session-context` which does these steps auto
 For multi-step tasks:
 
 ```
-1. Create plan:     sift_memory_add(type="plan", title="Implement feature X")
-2. Add steps:       sift_memory_add(type="step", parent_id="mem-xxx", title="Step 1")
-3. Record decisions: sift_memory_decide(plan_id="mem-xxx", question="...", decision="...")
-4. Track progress:  sift_memory_update(id="mem-xxx", status="in_progress")
-5. Complete:        sift_memory_update(id="mem-xxx", status="done")
+1. Create plan: memory_add(type="plan", title="Implement feature X")
+2. Add steps: memory_add(type="step", parent_id="mem-xxx", title="Step 1")
+3. Record decisions: memory_decide(plan_id="mem-xxx", question="...", decision="...")
+4. Track progress: memory_update(id="mem-xxx", status="in_progress")
+5. Complete: memory_update(id="mem-xxx", status="done")
 ```
 
 ### Learning Loop
@@ -110,9 +110,9 @@ For multi-step tasks:
 When you learn something:
 
 ```
-1. User corrects you → sift_memory_reflect(type="correction", ...)
-2. If mistake to avoid → sift_memory_add(type="gotcha", ...)
-3. If behavior to follow → sift_memory_add(type="pattern", status="active", ...)
+1. User corrects you → memory_reflect(type="correction", ...)
+2. If mistake to avoid → memory_add(type="gotcha", ...)
+3. If behavior to follow → memory_add(type="pattern", status="active", ...)
 ```
 
 ### Understanding History
@@ -120,10 +120,10 @@ When you learn something:
 To understand project history:
 
 ```
-sift_memory_context()           → Rich session context with themes
-sift_memory_traverse(id, hops)  → Walk backwards through chain
-sift_memory_origin(id)          → Find the root of a memory chain
-sift_memory_network(mode="hubs") → Find most-connected memories
+memory_context() → Rich session context with themes
+memory_traverse(id, hops) → Walk backwards through chain
+memory_origin(id) → Find the root of a memory chain
+memory_network(mode="hubs") → Find most-connected memories
 ```
 
 ---
@@ -141,7 +141,7 @@ sift_memory_network(mode="hubs") → Find most-connected memories
 | `plan` | Multi-step work | open | Complex tasks |
 | `step` | Steps within a plan | open | Use with parent_id |
 | `task` | Single actionable items | open | Todo items |
-| `synthesis` | Consolidated knowledge | open | Created by `sift_memory_synthesize` |
+| `synthesis` | Consolidated knowledge | open | Created by `memory_synthesize` |
 | `instance` | Concrete occurrence of a canonical | active | Auto-created on duplicates |
 
 ### Status Meanings
@@ -157,7 +157,7 @@ sift_memory_network(mode="hubs") → Find most-connected memories
 
 **Important:** `status='active'` means the memory is always relevant. Use for patterns and preferences.
 
-**Archive philosophy:** Nothing is deleted. `archived` memories are excluded from `sift_memory_list` by default but remain accessible via `sift_memory_get`, searchable, and all links stay intact.
+**Archive philosophy:** Nothing is deleted. `archived` memories are excluded from `memory_list` by default but remain accessible via `memory_get`, searchable, and all links stay intact.
 
 ### Chain Linking
 
@@ -225,51 +225,51 @@ The system detects query intent and boosts relevant types:
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `sift_memory_add` | Create memory | type*, title*, description, parent_id, priority, status, metadata |
-| `sift_memory_get` | Get by ID | id* |
-| `sift_memory_update` | Modify memory | id*, title, description, status, priority, metadata |
-| `sift_memory_archive` | Archive memory | id*, cascade (default: true) |
+| `memory_add` | Create memory | type*, title*, description, parent_id, priority, status, metadata |
+| `memory_get` | Get by ID | id* |
+| `memory_update` | Modify memory | id*, title, description, status, priority, metadata |
+| `memory_archive` | Archive memory | id*, cascade (default: true) |
 
 ### Synthesis Tools
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `sift_memory_synthesize` | Consolidate memories | sources* (array), title*, summary*, mark_sources |
-| `sift_memory_expand` | Show synthesis sources | id* (synthesis memory ID) |
+| `memory_synthesize` | Consolidate memories | sources* (array), title*, summary*, mark_sources |
+| `memory_expand` | Show synthesis sources | id* (synthesis memory ID) |
 
 ### Query Tools
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `sift_memory_list` | List memories | type, status, parent_id, metadata, limit, include_archived |
-| `sift_memory_search` | Full-text search | query*, type, limit, expand_synonyms |
-| `sift_memory_ready` | Tasks with no blockers | limit |
-| `sift_memory_stale` | Old memories | days, limit |
+| `memory_list` | List memories | type, status, parent_id, metadata, limit, include_archived |
+| `memory_search` | Full-text search | query*, type, limit, expand_synonyms |
+| `memory_ready` | Tasks with no blockers | limit |
+| `memory_stale` | Old memories | days, limit |
 
 ### Dependency Tools
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `sift_memory_link` | Create link | from_id*, to_id*, dep_type (blocks/related/follows/synthesizes) |
-| `sift_memory_unlink` | Remove link | from_id*, to_id* |
-| `sift_memory_deps` | Query dependencies | id*, direction (blockers/blocking) |
+| `memory_link` | Create link | from_id*, to_id*, dep_type (blocks/related/follows/synthesizes) |
+| `memory_unlink` | Remove link | from_id*, to_id* |
+| `memory_deps` | Query dependencies | id*, direction (blockers/blocking) |
 
 ### Decision Tools
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `sift_memory_decide` | Record decision | plan_id*, question*, decision*, rationale |
-| `sift_memory_decisions` | Query decisions | plan_id, query, limit |
-| `sift_memory_supersede` | Replace decision | decision_id*, new_decision*, new_rationale |
+| `memory_decide` | Record decision | plan_id*, question*, decision*, rationale |
+| `memory_decisions` | Query decisions | plan_id, query, limit |
+| `memory_supersede` | Replace decision | decision_id*, new_decision*, new_rationale |
 
 ### Reflection Tools
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `sift_memory_reflect` | Log reflection | reflection_type* (reasoning/observation/correction), content*, memory_id, context |
-| `sift_memory_reflections` | Query reflections | type, memory_id, query, limit |
-| `sift_memory_reflect_trajectory` | Reflect on chain | reflection_type*, content*, chain_end_id*, chain_start_id |
-| `sift_memory_trajectory_reflections` | Query trajectories | query, type, min_segment_length, max_segment_length, limit |
+| `memory_reflect` | Log reflection | reflection_type* (reasoning/observation/correction), content*, memory_id, context |
+| `memory_reflections` | Query reflections | type, memory_id, query, limit |
+| `memory_reflect_trajectory` | Reflect on chain | reflection_type*, content*, chain_end_id*, chain_start_id |
+| `memory_trajectory_reflections` | Query trajectories | query, type, min_segment_length, max_segment_length, limit |
 
 Trajectory types: `trajectory_pattern`, `arc_summary`, `pivot_point`, `friction_analysis`
 
@@ -277,16 +277,16 @@ Trajectory types: `trajectory_pattern`, `arc_summary`, `pivot_point`, `friction_
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `sift_memory_traverse` | Walk chain | id*, hops, link_types |
-| `sift_memory_origin` | Find chain root | id*, link_type |
-| `sift_memory_context` | Session context | depth, include_decisions |
+| `memory_traverse` | Walk chain | id*, hops, link_types |
+| `memory_origin` | Find chain root | id*, link_type |
+| `memory_context` | Session context | depth, include_decisions |
 
 ### Network Analysis
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `sift_memory_network` | Graph analysis | mode* (hubs/neighbors/cluster/bridges/layers), id, link_types, limit |
-| `sift_memory_instances` | Query instances of a canonical | id*, limit, since |
+| `memory_network` | Graph analysis | mode* (hubs/neighbors/cluster/bridges/layers), id, link_types, limit |
+| `memory_instances` | Query instances of a canonical | id*, limit, since |
 
 Network modes:
 - `hubs`: Most-connected memories (degree centrality)
@@ -299,12 +299,12 @@ Network modes:
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `sift_fingerprint_load` | Load fingerprint for session start | fingerprint_id (optional, defaults to latest) |
-| `sift_fingerprint_generate` | Create new fingerprint | (none) |
-| `sift_fingerprint_compare` | Compare two fingerprints | id1*, id2* |
-| `sift_fingerprint_drift` | Detect session deviation | (none) |
+| `fingerprint_load` | Load fingerprint for session start | fingerprint_id (optional, defaults to latest) |
+| `fingerprint_generate` | Create new fingerprint | (none) |
+| `fingerprint_compare` | Compare two fingerprints | id1*, id2* |
+| `fingerprint_drift` | Detect session deviation | (none) |
 
-**Call `sift_fingerprint_load` FIRST at session start.** It returns:
+**Call `fingerprint_load` FIRST at session start.** It returns:
 - **posture**: Human-readable descriptions of engagement patterns
 - **priors**: Behaviors to follow based on learned patterns  
 - **stance**: Toward user, errors, and decisions
@@ -327,8 +327,8 @@ Confidence levels:
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `sift_memory_config` | View ranking weights | (none) |
-| `sift_memory_tune` | Adjust weights | key*, value*, rationale* |
+| `memory_config` | View ranking weights | (none) |
+| `memory_tune` | Adjust weights | key*, value*, rationale* |
 
 Keys: `weight_freq`, `weight_recency`, `weight_priority`, `weight_context`
 
@@ -336,10 +336,14 @@ Keys: `weight_freq`, `weight_recency`, `weight_priority`, `weight_context`
 
 | Tool | Purpose | Key Parameters |
 |------|---------|----------------|
-| `sift_memory_stats` | Database stats + context | (none) - **call at session start** |
-| `sift_memory_backups` | List backups | (none) |
-| `sift_memory_restore` | Restore backup | backup |
-| `sift_memory_import` | Import markdown | path*, type, delete_after |
+| `memory_stats` | Database stats + context | (none) - **call at session start** |
+| `memory_backups` | List backups | (none) |
+| `memory_restore` | Restore backup | backup |
+| `memory_import` | Import markdown | path*, type, delete_after |
+| `memory_prune` | Prune by strategy | strategy*, dry_run, days, limit |
+| `memory_explore` | Divergent retrieval | seed, query, exclude_recent, limit |
+
+Strategies: `duplicates` (same title+type), `stale` (unaccessed, access_count=0), `low_importance` (importance scoring). `dry_run` defaults to `true`.
 
 ### Auto-Streaming
 
@@ -349,44 +353,44 @@ Memory tools automatically stream large results to prevent context overflow. Str
 
 | Tool | Threshold | Streams |
 |------|-----------|---------|
-| `sift_memory_list` | >15 items | Memory items |
-| `sift_memory_search` | >50 items | Search results |
-| `sift_memory_stale` | >15 items | Stale memories |
-| `sift_memory_ready` | >15 items | Ready tasks |
-| `sift_memory_reflections` | >15 items | Reflections |
-| `sift_memory_decisions` | >15 items | Decisions |
-| `sift_memory_stats` | >15 detail items | Stats details |
-| `sift_memory_context` | >15 items | Context data |
-| `sift_memory_cache_status` | >15 candidates | Eviction candidates |
+| `memory_list` | >15 items | Memory items |
+| `memory_search` | >50 items | Search results |
+| `memory_stale` | >15 items | Stale memories |
+| `memory_ready` | >15 items | Ready tasks |
+| `memory_reflections` | >15 items | Reflections |
+| `memory_decisions` | >15 items | Decisions |
+| `memory_stats` | >15 detail items | Stats details |
+| `memory_context` | >15 items | Context data |
+| `memory_cache_status` | >15 candidates | Eviction candidates |
 
 **Control streaming:**
 - `stream: true` - Force streaming regardless of size
 - `stream: false` - Disable auto-streaming
 
-When streaming, the tool returns a `stream_id`. Use `sift_stream_read(stream_id)` to read chunks.
+When streaming, the tool returns a `stream_id`. Use `stream_read(stream_id)` to read chunks.
 
 ---
 
 ## Quick Reference
 
-**Save user info:** `sift_memory_add(type="preference", title="User's name is X")`
+**Save user info:** `memory_add(type="preference", title="User's name is X")`
 
-**Log correction:** `sift_memory_reflect(reflection_type="correction", content="...")`
+**Log correction:** `memory_reflect(reflection_type="correction", content="...")`
 
-**Create plan:** `sift_memory_add(type="plan", title="...")` then add steps with `parent_id`
+**Create plan:** `memory_add(type="plan", title="...")` then add steps with `parent_id`
 
-**Track progress:** `sift_memory_update(id="mem-xxx", status="done")`
+**Track progress:** `memory_update(id="mem-xxx", status="done")`
 
-**Find patterns:** `sift_memory_list(type="pattern", status="active")`
+**Find patterns:** `memory_list(type="pattern", status="active")`
 
-**Search memories:** `sift_memory_search(query="authentication")`
+**Search memories:** `memory_search(query="authentication")`
 
-**Archive memory:** `sift_memory_archive(id="mem-xxx")` (preserves links, excluded from list by default)
+**Archive memory:** `memory_archive(id="mem-xxx")` (preserves links, excluded from list by default)
 
-**Synthesize:** `sift_memory_synthesize(sources=["mem-a","mem-b"], title="...", summary="...")`
+**Synthesize:** `memory_synthesize(sources=["mem-a","mem-b"], title="...", summary="...")`
 
-**Expand synthesis:** `sift_memory_expand(id="mem-synthesis-xxx")` (shows constituent sources)
+**Expand synthesis:** `memory_expand(id="mem-synthesis-xxx")` (shows constituent sources)
 
-**View instances:** `sift_memory_instances(id="mem-xxx")` (all occurrences of a canonical)
+**View instances:** `memory_instances(id="mem-xxx")` (all occurrences of a canonical)
 
-**View layers:** `sift_memory_network(mode="layers")` (3D topology with canonicals and instances)
+**View layers:** `memory_network(mode="layers")` (3D topology with canonicals and instances)
