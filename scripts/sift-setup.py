@@ -244,13 +244,6 @@ def main():
             except Exception:
                 pass
             
-            # Also install uninstall script
-            print("  Downloading uninstall script...")
-            uninstall_dest = INSTALL_DIR / "sift-uninstall.py"
-            if download_file(f"{release_url}/sift-uninstall.py", uninstall_dest):
-                uninstall_dest.chmod(0o755)
-                print(f"  ✓ Installed {uninstall_dest}")
-            
             # Check PATH
             if not shutil.which("sift"):
                 print(f"  Note: Add {INSTALL_DIR} to your PATH")
@@ -258,6 +251,13 @@ def main():
             print("  Error: Failed to download binary")
     else:
         print("  Skipped.")
+    
+    # Always update uninstall script (even if binary was skipped)
+    print("  Downloading uninstall script...")
+    uninstall_dest = INSTALL_DIR / "sift-uninstall.py"
+    if download_file(f"{release_url}/sift-uninstall.py", uninstall_dest):
+        uninstall_dest.chmod(0o755)
+        print(f"  ✓ Installed {uninstall_dest}")
     print()
     
     # Step 2: Install templates
