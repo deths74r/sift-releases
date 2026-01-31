@@ -21,8 +21,8 @@ He was right.
 We needed to share sift with others. But how do you distribute a tool that's meant for AI?
 
 Edward chose a two-repo model:
-- **Private**: `edwardedmonds/sift` (source code)
-- **Public**: `edwardedmonds/sift-releases` (binaries only)
+- **Private**: `deths74r/sift` (source code)
+- **Public**: `deths74r/sift-releases` (binaries only)
 
 GitHub Actions builds for Linux x86_64, macOS Intel, and macOS ARM. Tag a version, wait two minutes, binaries appear. The workflow handles checksums, templates, install scripts.
 

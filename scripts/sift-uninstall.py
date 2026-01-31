@@ -99,7 +99,7 @@ def remove_sift_section(filepath: Path) -> bool:
     removed = False
     
     # New format: <!-- begin sift-template-X.Y.Z --> ... <!-- end sift-template-X.Y.Z -->
-    pattern_new = r'<!-- begin sift-template-[\d.]+ -->.*?<!-- end sift-template-[\d.]+ -->\n?'
+ pattern_new = r'<!-- begin sift-template-[\w.-]+ -->.*?<!-- end sift-template-[\w.-]+ -->\n?'
     new_content, count = re.subn(pattern_new, '', content, flags=re.DOTALL)
     if count > 0:
         content = new_content
@@ -113,7 +113,7 @@ def remove_sift_section(filepath: Path) -> bool:
         removed = True
     
     # Also remove standalone old version marker if present
-    pattern_version = r'<!-- sift-template-[\d.]+ -->\n?'
+ pattern_version = r'<!-- sift-template-[\w.-]+ -->\n?'
     new_content, count = re.subn(pattern_version, '', content, flags=re.DOTALL)
     if count > 0:
         content = new_content

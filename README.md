@@ -56,7 +56,7 @@ The history document demonstrates both thinking modes working together: linear c
 Interactive installer that prompts for each step:
 
 ```bash
-curl -fsSL https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-setup.py | python3
+curl -fsSL https://github.com/deths74r/sift-releases/releases/latest/download/sift-setup.py | python3
 ```
 
 The installer will prompt before each step:
@@ -79,9 +79,9 @@ python3 ~/.local/bin/sift-uninstall.py
 
 | Platform | Command |
 |----------|--------|
-| Linux x86_64 | `curl -LO https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-linux-x86_64` |
-| macOS Apple Silicon | `curl -LO https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-darwin-arm64` |
-| macOS Intel | `curl -LO https://github.com/edwardedmonds/sift-releases/releases/latest/download/sift-darwin-x86_64` |
+| Linux x86_64 | `curl -LO https://github.com/deths74r/sift-releases/releases/latest/download/sift-linux-x86_64` |
+| macOS Apple Silicon | `curl -LO https://github.com/deths74r/sift-releases/releases/latest/download/sift-darwin-arm64` |
+| macOS Intel | `curl -LO https://github.com/deths74r/sift-releases/releases/latest/download/sift-darwin-x86_64` |
 
 **Step 2: Install**
 ```bash

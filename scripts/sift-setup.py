@@ -28,7 +28,7 @@ import sys
 import urllib.request
 from pathlib import Path
 
-REPO = "edwardedmonds/sift-releases"
+REPO = "deths74r/sift-releases"
 CLAUDE_DIR = Path.home() / ".claude"
 SETTINGS_FILE = CLAUDE_DIR / "settings.json"
 INSTALL_DIR = Path.home() / ".local" / "bin"
