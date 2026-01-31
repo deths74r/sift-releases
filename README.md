@@ -136,7 +136,7 @@ Sift stores data in two locations:
 
 ### Memory
 
-[sift_memory_add](#sift_memory_add) · [sift_memory_get](#sift_memory_get) · [sift_memory_search](#sift_memory_search) · [sift_memory_list](#sift_memory_list) · [sift_memory_update](#sift_memory_update) · [sift_memory_archive](#sift_memory_archive) · [sift_memory_synthesize](#sift_memory_synthesize) · [sift_memory_expand](#sift_memory_expand) · [sift_memory_decide](#sift_memory_decide) · [sift_memory_decisions](#sift_memory_decisions) · [sift_memory_supersede](#sift_memory_supersede) · [sift_memory_reflect](#sift_memory_reflect) · [sift_memory_reflections](#sift_memory_reflections) · [sift_memory_reflect_trajectory](#sift_memory_reflect_trajectory) · [sift_memory_trajectory_reflections](#sift_memory_trajectory_reflections) · [sift_memory_link](#sift_memory_link) · [sift_memory_unlink](#sift_memory_unlink) · [sift_memory_deps](#sift_memory_deps) · [sift_memory_ready](#sift_memory_ready) · [sift_memory_stale](#sift_memory_stale) · [sift_memory_stats](#sift_memory_stats) · [sift_memory_context](#sift_memory_context) · [sift_memory_traverse](#sift_memory_traverse) · [sift_memory_origin](#sift_memory_origin) · [sift_memory_network](#sift_memory_network) · [sift_memory_instances](#sift_memory_instances) · [sift_memory_challenge](#sift_memory_challenge) · [sift_memory_challenge_evidence](#sift_memory_challenge_evidence) · [sift_memory_config](#sift_memory_config) · [sift_memory_tune](#sift_memory_tune) · [sift_memory_backups](#sift_memory_backups) · [sift_memory_restore](#sift_memory_restore) · [sift_memory_import](#sift_memory_import)
+[sift_memory_add](#sift_memory_add) · [sift_memory_get](#sift_memory_get) · [sift_memory_search](#sift_memory_search) · [sift_memory_list](#sift_memory_list) · [sift_memory_update](#sift_memory_update) · [sift_memory_archive](#sift_memory_archive) · [sift_memory_synthesize](#sift_memory_synthesize) · [sift_memory_expand](#sift_memory_expand) · [sift_memory_decide](#sift_memory_decide) · [sift_memory_decisions](#sift_memory_decisions) · [sift_memory_supersede](#sift_memory_supersede) · [sift_memory_reflect](#sift_memory_reflect) · [sift_memory_reflections](#sift_memory_reflections) · [sift_memory_reflect_trajectory](#sift_memory_reflect_trajectory) · [sift_memory_trajectory_reflections](#sift_memory_trajectory_reflections) · [sift_memory_link](#sift_memory_link) · [sift_memory_unlink](#sift_memory_unlink) · [sift_memory_deps](#sift_memory_deps) · [sift_memory_ready](#sift_memory_ready) · [sift_memory_stale](#sift_memory_stale) · [sift_memory_stats](#sift_memory_stats) · [sift_memory_context](#sift_memory_context) · [sift_memory_traverse](#sift_memory_traverse) · [sift_memory_origin](#sift_memory_origin) · [sift_memory_network](#sift_memory_network) · [sift_memory_instances](#sift_memory_instances) · [sift_memory_challenge](#sift_memory_challenge) · [sift_memory_challenge_evidence](#sift_memory_challenge_evidence) · [sift_memory_config](#sift_memory_config) · [sift_memory_tune](#sift_memory_tune) · [sift_memory_backups](#sift_memory_backups) · [sift_memory_restore](#sift_memory_restore) · [sift_memory_import](#sift_memory_import) · [sift_memory_prune](#sift_memory_prune) · [sift_memory_explore](#sift_memory_explore)
 
 ### Context
 
@@ -494,6 +494,26 @@ Converts a markdown file into a memory entry. Useful for migrating existing docu
 
 ```
 Import the ARCHITECTURE.md file as a plan memory
+```
+
+
+<a name="sift_memory_prune"></a>
+### sift_memory_prune
+Prune memories by strategy.
+
+Three strategies: `duplicates` (same title+type, keeps highest access_count), `stale` (not accessed in N days with access_count=0), `low_importance` (uses importance scoring). Defaults to dry_run=true for safety. Excludes active plans/steps and in-progress work.
+
+```
+Show duplicate memories that could be pruned
+```
+
+
+<a name="sift_memory_explore"></a>
+### sift_memory_explore
+Divergent memory retrieval — find memories you wouldn't normally find.
+Uses anti-recency scoring, graph exploration, topic drift, and MMR diversity re-ranking. Three modes: seed (explore outward from a memory), query (diversity-heavy topic exploration), discovery (surface neglected memories). Use when starting a new plan, feeling stuck, or asking "what am I not thinking about?"
+```
+What have I forgotten about this project?
 ```
 
 

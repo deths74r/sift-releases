@@ -266,13 +266,24 @@ def main():
     
     CLAUDE_DIR.mkdir(parents=True, exist_ok=True)
     
-    # Check for sift template marker, not just file existence
-    # (CLAUDE.md may exist with user content after uninstall removes sift section)
+    # Check if ALL templates are installed (not just CLAUDE.md marker)
     claude_md = CLAUDE_DIR / "CLAUDE.md"
-    has_sift_templates = False
+    has_sift_templates = True
+
+    # Check CLAUDE.md has sift marker
     if claude_md.exists():
         content = claude_md.read_text()
-        has_sift_templates = "<!-- begin sift-template-" in content or "<!-- SIFT_BEGIN -->" in content
+        if "<!-- begin sift-template-" not in content:
+            has_sift_templates = False
+    else:
+        has_sift_templates = False
+
+    # Check all other template files exist
+    if has_sift_templates:
+        for template in TEMPLATES:
+            if not (CLAUDE_DIR / template).exists():
+                has_sift_templates = False
+                break
     
     if has_sift_templates:
         print("  Templates already installed.")
