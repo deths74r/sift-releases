@@ -88,40 +88,20 @@ def save_settings(settings: dict) -> None:
 def remove_sift_section(filepath: Path) -> bool:
     """Remove sift template content from file.
     
-    Handles two formats:
-    - New: <!-- begin sift-template-X.Y.Z --> ... <!-- end sift-template-X.Y.Z -->
-    - Old: <!-- sift-template-X.Y.Z --> ... <!-- SIFT_BEGIN --> ... <!-- SIFT_END -->
+    Format: <!-- begin sift-template-X.Y.Z --> ... <!-- end sift-template-X.Y.Z -->
     """
     if not filepath.exists():
         return False
     
     content = filepath.read_text()
-    removed = False
     
-    # New format: <!-- begin sift-template-X.Y.Z --> ... <!-- end sift-template-X.Y.Z -->
- pattern_new = r'<!-- begin sift-template-[\w.-]+ -->.*?<!-- end sift-template-[\w.-]+ -->\n?'
-    new_content, count = re.subn(pattern_new, '', content, flags=re.DOTALL)
+    pattern = r'<!-- begin sift-template-[\w.-]+ -->.*?<!-- end sift-template-[\w.-]+ -->\n?'
+    new_content, count = re.subn(pattern, '', content, flags=re.DOTALL)
+    
     if count > 0:
-        content = new_content
-        removed = True
-    
-    # Old format: <!-- SIFT_BEGIN --> ... <!-- SIFT_END -->
-    pattern_old = r'<!-- SIFT_BEGIN -->.*?<!-- SIFT_END -->\n?'
-    new_content, count = re.subn(pattern_old, '', content, flags=re.DOTALL)
-    if count > 0:
-        content = new_content
-        removed = True
-    
-    # Also remove standalone old version marker if present
- pattern_version = r'<!-- sift-template-[\w.-]+ -->\n?'
-    new_content, count = re.subn(pattern_version, '', content, flags=re.DOTALL)
-    if count > 0:
-        content = new_content
-        removed = True
-    
-    if removed:
-        filepath.write_text(content)
-    return removed
+        filepath.write_text(new_content)
+        return True
+    return False
 
 
 def main():
